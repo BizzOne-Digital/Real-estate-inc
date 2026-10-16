@@ -1,5 +1,5 @@
 import "server-only";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { ZodError } from "zod";
 import { AuthError, requireAdmin, type CurrentAdmin } from "./auth";
 import { CONTENT_TAG } from "./data";
@@ -28,7 +28,8 @@ export async function guarded<T = undefined>(fn: (admin: CurrentAdmin) => Promis
 
 /** Refresh cached public content after any admin change. */
 export function revalidateContent() {
-  revalidateTag(CONTENT_TAG);
+  // updateTag expires the cache immediately so the admin sees their change on the next request.
+  updateTag(CONTENT_TAG);
   revalidatePath("/", "layout");
 }
 

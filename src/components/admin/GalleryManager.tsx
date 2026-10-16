@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { ArrowDown, ArrowUp, Loader2, Plus, Save, Trash2 } from "lucide-react";
 import { createGalleryItem, deleteGalleryItem, reorderGallery, updateGalleryItem } from "@/app/admin/actions/gallery";
 import { LocalImageField } from "./LocalImageField";
@@ -65,7 +65,12 @@ export function GalleryManager({ items: initialItems, categories }: { items: Gal
   const [pending, start] = useTransition();
   const [toDelete, setToDelete] = useState<GalleryRow | null>(null);
 
-  useEffect(() => setItems(initialItems), [initialItems]);
+  // Reset local edits when fresh data arrives from the server.
+  const [lastInitial, setLastInitial] = useState(initialItems);
+  if (lastInitial !== initialItems) {
+    setLastInitial(initialItems);
+    setItems(initialItems);
+  }
   const setBusyFor = (key: string) => (b: boolean) => setBusy((s) => (s[key] === b ? s : { ...s, [key]: b }));
   const anyBusy = pending || Object.values(busy).some(Boolean);
 

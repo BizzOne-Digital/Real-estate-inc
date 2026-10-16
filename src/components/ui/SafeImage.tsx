@@ -1,7 +1,7 @@
 "use client";
 
 import Image, { type ImageLoaderProps, type ImageProps } from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { resolveImageSrc } from "@/lib/generated-images";
 
 export const PLACEHOLDER_SRC = "/placeholder.svg";
@@ -30,10 +30,9 @@ type Props = Omit<ImageProps, "src" | "alt"> & { src?: string | null; alt: strin
 /** next/image wrapper with a single, loop-safe fallback to a neutral placeholder. */
 export function SafeImage({ src, alt, unoptimized, ...rest }: Props) {
   const resolvedSrc = typeof src === "string" ? resolveImageSrc(src) : src;
-  const initial = isRenderableSrc(resolvedSrc) ? resolvedSrc : PLACEHOLDER_SRC;
-  const [current, setCurrent] = useState(initial);
-
-  useEffect(() => setCurrent(isRenderableSrc(resolvedSrc) ? resolvedSrc : PLACEHOLDER_SRC), [resolvedSrc]);
+  // Remember which source failed so a new src gets a fresh attempt, and the placeholder never loops.
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
+  const current = isRenderableSrc(resolvedSrc) && failedSrc !== resolvedSrc ? resolvedSrc : PLACEHOLDER_SRC;
 
   const isPlaceholder = current === PLACEHOLDER_SRC;
   const isUnsplash = current.startsWith("https://images.unsplash.com/");
@@ -48,7 +47,7 @@ export function SafeImage({ src, alt, unoptimized, ...rest }: Props) {
       // GIFs keep their animation, and the SVG placeholder is served as-is.
       unoptimized={unoptimized || isGif || isPlaceholder}
       onError={() => {
-        if (current !== PLACEHOLDER_SRC) setCurrent(PLACEHOLDER_SRC);
+        if (current !== PLACEHOLDER_SRC) setFailedSrc(current);
       }}
     />
   );

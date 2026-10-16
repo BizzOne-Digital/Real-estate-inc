@@ -6,7 +6,7 @@ const SESSION_COOKIE = "furn_admin_session";
  * Convenience redirect only. Real authorization happens server-side in every admin page,
  * server action and API route (see lib/auth.ts).
  */
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const hasSession = Boolean(req.cookies.get(SESSION_COOKIE)?.value);
   let res: NextResponse;

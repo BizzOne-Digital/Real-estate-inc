@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { Loader2, Search, X } from "lucide-react";
 import { PRODUCT_SORTS, type ProductSort } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -20,7 +20,12 @@ export function CatalogControls({ categories, active }: Props) {
   const [pending, startTransition] = useTransition();
   const [q, setQ] = useState(active.q);
 
-  useEffect(() => setQ(active.q), [active.q]);
+  // Keep the input in sync when the URL query changes (e.g. back/forward).
+  const [lastQ, setLastQ] = useState(active.q);
+  if (lastQ !== active.q) {
+    setLastQ(active.q);
+    setQ(active.q);
+  }
 
   function hrefWith(changes: Record<string, string | null>) {
     const next = new URLSearchParams(params.toString());

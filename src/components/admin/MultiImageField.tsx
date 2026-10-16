@@ -28,7 +28,9 @@ export function MultiImageField({
   const [progress, setProgress] = useState("");
   const unsaved = useRef(new Set<string>());
   const latest = useRef(value);
-  latest.current = value;
+  useEffect(() => {
+    latest.current = value;
+  }, [value]);
 
   useEffect(() => onBusyChange?.(busy), [busy, onBusyChange]);
 

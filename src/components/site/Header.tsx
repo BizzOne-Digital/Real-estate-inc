@@ -25,6 +25,12 @@ export function Header({ logo, logoAlt }: { logo: string; logoAlt: string }) {
   // On the homepage the desktop header floats over the split hero, as in the reference design.
   const overlay = pathname === "/";
   const [open, setOpen] = useState(false);
+  // Close the drawer whenever navigation happens.
+  const [lastPath, setLastPath] = useState(pathname);
+  if (lastPath !== pathname) {
+    setLastPath(pathname);
+    setOpen(false);
+  }
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -34,8 +40,6 @@ export function Header({ logo, logoAlt }: { logo: string; logoAlt: string }) {
     menuButtonRef.current?.focus();
   }, []);
 
-  // Close the drawer whenever navigation happens.
-  useEffect(() => setOpen(false), [pathname]);
 
   useEffect(() => {
     if (!open) return;

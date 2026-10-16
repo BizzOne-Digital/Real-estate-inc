@@ -40,7 +40,12 @@ export function AdminShell({
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  useEffect(() => setOpen(false), [pathname]);
+  // Close the menu whenever the route changes.
+  const [lastPath, setLastPath] = useState(pathname);
+  if (lastPath !== pathname) {
+    setLastPath(pathname);
+    setOpen(false);
+  }
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
