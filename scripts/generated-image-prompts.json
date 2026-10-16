@@ -1,0 +1,116 @@
+{
+  "generator": "Built-in image_gen",
+  "style": "Cream, walnut and muted olive, natural daylight, premium furniture photography",
+  "assets": [
+    {
+      "file": "public/images/hero-living-room.webp",
+      "originalSamplePhotoId": "1616486338812-3dadae4b4ace",
+      "prompt": "Cream boucle sofa, walnut drum table, travertine fireplace, garden windows. Warm editorial architectural photograph."
+    },
+    {
+      "file": "public/images/living-room.webp",
+      "originalSamplePhotoId": "1618221195710-dd6b41faaea6",
+      "prompt": "Architectural living room, cream linen sectional sofa, walnut round coffee table, built-in walnut bookshelves, ceramic vase and olive branches, garden windows, cream rug. Wide composition including complete seating arrangement, like an editorial furniture showroom. Landscape 1536x1024, warm cream and walnut editorial photography, soft daylight, realistic textures, no people, text, logos, watermark or UI."
+    },
+    {
+      "file": "public/images/bedroom.webp",
+      "originalSamplePhotoId": "1617325247661-675ab4b64ae2",
+      "prompt": "Peaceful bedroom, low natural solid pine platform queen bed, white linen bedding with olive throw, soft taupe textured wall, round bedside lamp, warm wood nightstand, sunlight from tall window. Full bed visible, elegant architectural room photograph. Landscape 1536x1024, warm cream and walnut editorial photography, soft daylight, realistic textures, no people, text, logos, watermark or UI."
+    },
+    {
+      "file": "public/images/dining-room.webp",
+      "originalSamplePhotoId": "1604578762246-41134e37f9cc",
+      "prompt": "Beautiful dining room, generous rectangular walnut table for six, six cream upholstered wooden chairs, sculptural cream pendant light, vase with branches, tall garden windows. Full furniture visible, warm daylight, same sophisticated cream and walnut style. Landscape 1536x1024, warm cream and walnut editorial photography, soft daylight, realistic textures, no people, text, logos, watermark or UI."
+    },
+    {
+      "file": "public/images/arden-sofa.webp",
+      "originalSamplePhotoId": "1555041469-a586c61ea9bc",
+      "prompt": "Use case: product-mockup. Asset: premium furniture catalog photograph ONLY. Landscape 1536x1024. Furniture catalog hero of a forest green velvet clean-lined three-seat sofa, tapered solid walnut legs, three generous supportive cushions. Three-quarter front view with entire sofa visible against warm white plaster wall, pale oak floor, neutral rug, minimal side styling. Cohesive cream, walnut, natural texture art direction with soft daylight, realistic product proportions, exquisite upholstery / wood detail, crisp professional commercial interior photograph with crop-safe margins. No people, no text, no logos, no watermark, no UI, no collage."
+    },
+    {
+      "file": "public/images/arden-sofa-detail.webp",
+      "originalSamplePhotoId": "1493663284031-b7e3aefcae8e",
+      "prompt": "Use case: product-mockup. Asset: premium furniture catalog photograph ONLY. Landscape 1536x1024. Detail photograph of a forest green velvet sofa, rich pile fabric, generous supportive cushion seam, tapered walnut leg and timber frame edge, natural window light. Elegant close-up furniture craftsmanship photography, realistic material detail. Cohesive cream, walnut, natural texture art direction with soft daylight, realistic product proportions, exquisite upholstery / wood detail, crisp professional commercial interior photograph with crop-safe margins. No people, no text, no logos, no watermark, no UI, no collage."
+    },
+    {
+      "file": "public/images/linden-lounge-chair.webp",
+      "originalSamplePhotoId": "1586023492125-27b2c045efd7",
+      "prompt": "Use case: product-mockup. Asset: premium furniture catalog photograph ONLY. Landscape 1536x1024. Single compact lounge chair, softly sculpted back, oatmeal woven fabric upholstery and solid oak legs, deep comfortable seat, entire chair visible at three-quarter angle, neutral plaster wall, pale oak floor, small book beside it. Premium furniture catalog. Cohesive cream, walnut, natural texture art direction with soft daylight, realistic product proportions, exquisite upholstery / wood detail, crisp professional commercial interior photograph with crop-safe margins. No people, no text, no logos, no watermark, no UI, no collage."
+    },
+    {
+      "file": "public/images/cove-tufted-chair.webp",
+      "originalSamplePhotoId": "1567538096630-e0c55bd6374c",
+      "prompt": "Single cream linen blend button-tufted accent chair, gently curved back, dark turned hardwood legs, traditional yet refined, entire chair visible with breathing room, three-quarter view in understated neutral interior. Landscape 1536x1024, warm cream and walnut editorial photography, soft daylight, realistic textures, no people, text, logos, watermark or UI."
+    },
+    {
+      "file": "public/images/haven-slipper-chair.webp",
+      "originalSamplePhotoId": "1616627547584-bf28cee262db",
+      "prompt": "Single armless slipper chair in ochre velvet with deep seat and solid hardwood legs. Elegant sculptural silhouette, entire chair in frame, three-quarter view, warm off-white wall and pale neutral rug. Landscape 1536x1024, warm cream and walnut editorial photography, soft daylight, realistic textures, no people, text, logos, watermark or UI."
+    },
+    {
+      "file": "public/images/walnut-side-table.webp",
+      "originalSamplePhotoId": "1611486212557-88be5ff6f941",
+      "prompt": "Single cantilevered walnut side table with open shelf for books, rich realistic walnut grain and clean joinery, full product visible, three-quarter catalog view, subtle ceramic cup, warm white plaster wall and light oak floor. Landscape 1536x1024, warm cream and walnut editorial photography, soft daylight, realistic textures, no people, text, logos, watermark or UI."
+    },
+    {
+      "file": "public/images/oslo-sideboard.webp",
+      "originalSamplePhotoId": "1616046229478-9901c5536a45",
+      "prompt": "Use case: product-mockup. Asset: premium furniture catalog photograph ONLY. Landscape 1536x1024. Low natural oak sideboard with woven cane-front doors and slim oak legs, beautifully visible cane texture and oak grain, full sideboard visible, off-white wall, restrained vase and framed abstract art above. Premium furniture catalog. Cohesive cream, walnut, natural texture art direction with soft daylight, realistic product proportions, exquisite upholstery / wood detail, crisp professional commercial interior photograph with crop-safe margins. No people, no text, no logos, no watermark, no UI, no collage."
+    },
+    {
+      "file": "public/images/harbor-upholstered-bed.webp",
+      "originalSamplePhotoId": "1616594039964-ae9021a400a0",
+      "prompt": "Use case: product-mockup. Asset: premium furniture catalog photograph ONLY. Landscape 1536x1024. Ivory upholstered queen bed with tall vertical channel-tufted padded headboard, layered white natural linen bedding and pale gray throw. Entire bed visible at three-quarter angle, minimal bedside tables, calm elegant daylight bedroom. Cohesive cream, walnut, natural texture art direction with soft daylight, realistic product proportions, exquisite upholstery / wood detail, crisp professional commercial interior photograph with crop-safe margins. No people, no text, no logos, no watermark, no UI, no collage."
+    },
+    {
+      "file": "public/images/nordic-nightstand.webp",
+      "originalSamplePhotoId": "1522771739844-6a9f6d5f14af",
+      "prompt": "Use case: product-mockup. Asset: premium furniture catalog photograph ONLY. Landscape 1536x1024. Compact Nordic nightstand, white lacquered body, one drawer and open shelf, solid natural ash legs. Full small furniture item visible in foreground, softly blurred linen bed edge behind, clean daylight product photograph. Cohesive cream, walnut, natural texture art direction with soft daylight, realistic product proportions, exquisite upholstery / wood detail, crisp professional commercial interior photograph with crop-safe margins. No people, no text, no logos, no watermark, no UI, no collage."
+    },
+    {
+      "file": "public/images/tufted-bed-bench.webp",
+      "originalSamplePhotoId": "1505693416388-ac5ce068fe85",
+      "prompt": "Use case: product-mockup. Asset: premium furniture catalog photograph ONLY. Landscape 1536x1024. Ivory linen button-tufted long upholstered bed bench with dark painted hardwood legs, complete bench centered in foreground at foot of a softly blurred cream bed, premium neutral bedroom photograph, emphasize entire bench and fabric texture. Cohesive cream, walnut, natural texture art direction with soft daylight, realistic product proportions, exquisite upholstery / wood detail, crisp professional commercial interior photograph with crop-safe margins. No people, no text, no logos, no watermark, no UI, no collage."
+    },
+    {
+      "file": "public/images/walnut-dining-table-detail.webp",
+      "originalSamplePhotoId": "1617806118233-18e1de247200",
+      "prompt": "Use case: product-mockup. Asset: premium furniture catalog photograph ONLY. Landscape 1536x1024. Detail and alternate angle of rectangular walnut dining table with solid hardwood base, warm grain and clean beveled edge, cream upholstered wooden chairs around it, garden-window daylight, tabletop and table construction prominent, beautiful editorial close crop. Cohesive cream, walnut, natural texture art direction with soft daylight, realistic product proportions, exquisite upholstery / wood detail, crisp professional commercial interior photograph with crop-safe margins. No people, no text, no logos, no watermark, no UI, no collage."
+    },
+    {
+      "file": "public/images/shell-dining-chair.webp",
+      "originalSamplePhotoId": "1592078615290-033ee584e267",
+      "prompt": "Use case: product-mockup. Asset: premium furniture catalog photograph ONLY. Landscape 1536x1024. Single white molded shell dining chair with cushioned ivory seat pad and slim natural beech legs, entire chair visible, three-quarter front view, warm neutral plaster wall and light wood floor, clean catalog photograph. Cohesive cream, walnut, natural texture art direction with soft daylight, realistic product proportions, exquisite upholstery / wood detail, crisp professional commercial interior photograph with crop-safe margins. No people, no text, no logos, no watermark, no UI, no collage."
+    },
+    {
+      "file": "public/images/heritage-dining-chair.webp",
+      "originalSamplePhotoId": "1549497538-303791108f95",
+      "prompt": "Use case: product-mockup. Asset: premium furniture website photograph ONLY. Landscape 1536x1024. Single classic solid chestnut hardwood dining chair with gently angled wooden back, crafted joinery, natural seat, entire chair clearly visible, three-quarter view, neutral cream wall and warm daylight. Refined furniture catalog. Cohesive cream, walnut, natural texture art direction with soft daylight, realistic product proportions, exquisite upholstery / wood detail, crisp professional commercial interior photograph with crop-safe margins. No people, no text, no logos, no watermark, no UI, no collage."
+    },
+    {
+      "file": "public/images/counter-stool.webp",
+      "originalSamplePhotoId": "1503602642458-232111445657",
+      "prompt": "Use case: product-mockup. Asset: premium furniture website photograph ONLY. Landscape 1536x1024. Single natural birch counter-height stool, simple curved wooden seat, four legs with footrest stretchers, entire stool visible, warm neutral wall and light floor, refined high-end catalog photography. Cohesive cream, walnut, natural texture art direction with soft daylight, realistic product proportions, exquisite upholstery / wood detail, crisp professional commercial interior photograph with crop-safe margins. No people, no text, no logos, no watermark, no UI, no collage."
+    },
+    {
+      "file": "public/images/warm-textures.webp",
+      "originalSamplePhotoId": "1616047006789-b7af5afb8c20",
+      "prompt": "Use case: product-mockup. Asset: premium furniture website photograph ONLY. Landscape 1536x1024. Calm living room with tan linen sectional, layered woven cream rug, walnut tables, olive cushions and plants, close texture-rich editorial composition, beautiful daylight, warm and welcoming premium interior. Cohesive cream, walnut, natural texture art direction with soft daylight, realistic product proportions, exquisite upholstery / wood detail, crisp professional commercial interior photograph with crop-safe margins. No people, no text, no logos, no watermark, no UI, no collage."
+    },
+    {
+      "file": "public/images/layered-bedroom.webp",
+      "originalSamplePhotoId": "1615874959474-d609969a20ed",
+      "prompt": "Use case: photorealistic-natural. Asset: premium furniture website interior inspiration photograph ONLY. Landscape 1536x1024. Elegant bedroom with layered cream bedding, oatmeal upholstered headboard, olive linen throw, walnut bedside tables and suspended cream pendant light, warm natural window light, complete styled bedroom interior. Cohesive cream, walnut, natural texture art direction with soft daylight, realistic furniture proportions, exquisite upholstery / wood detail, crisp professional architectural interior photograph with crop-safe margins. No people, no text, no logos, no watermark, no UI, no collage."
+    },
+    {
+      "file": "public/images/gallery-wall.webp",
+      "originalSamplePhotoId": "1600210492486-724fe5c67fb0",
+      "prompt": "Use case: photorealistic-natural. Asset: premium furniture website interior inspiration photograph ONLY. Landscape 1536x1024. Sophisticated lived-in living room, caramel leather sofa, carefully spaced gallery wall of muted abstract art in oak frames, walnut coffee table, cream rug, soft daylight and subtle leafy plant. Wide premium editorial interior photograph. Cohesive cream, walnut, natural texture art direction with soft daylight, realistic furniture proportions, exquisite upholstery / wood detail, crisp professional architectural interior photograph with crop-safe margins. No people, no text, no logos, no watermark, no UI, no collage."
+    },
+    {
+      "file": "public/images/colour-accents.webp",
+      "originalSamplePhotoId": "1540518614846-7eded433c457",
+      "prompt": "Use case: photorealistic-natural. Asset: premium furniture website interior inspiration photograph ONLY. Landscape 1536x1024. Beautiful neutral bedroom with natural linen bed, muted burnt orange upholstered bench at foot, restrained earthy ochre and rust accent pillows, cream plaster walls and walnut details, beautiful soft window light, elegant editorial interior photography. Cohesive cream, walnut, natural texture art direction with soft daylight, realistic furniture proportions, exquisite upholstery / wood detail, crisp professional architectural interior photograph with crop-safe margins. No people, no text, no logos, no watermark, no UI, no collage."
+    }
+  ]
+}
