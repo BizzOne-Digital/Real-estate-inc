@@ -2,10 +2,9 @@ import "server-only";
 import { randomBytes } from "crypto";
 import { connectDB } from "./db";
 import {
-  Category,
-  GalleryItem,
+  Condo,
   PageContent,
-  Product,
+  Post,
   SiteSettings,
   StoredUpload,
   type UploadFolder,
@@ -66,16 +65,14 @@ export function collectUploadUrls(value: unknown, out = new Set<string>()): Set<
 export async function referencedUploadUrls(): Promise<Set<string>> {
   await connectDB();
   const refs = new Set<string>();
-  const [products, categories, gallery, pages, settings] = await Promise.all([
-    Product.find({}, { images: 1 }).lean(),
-    Category.find({}, { image: 1 }).lean(),
-    GalleryItem.find({}, { image: 1 }).lean(),
+  const [condos, posts, pages, settings] = await Promise.all([
+    Condo.find({}, { images: 1 }).lean(),
+    Post.find({}, { coverImage: 1 }).lean(),
     PageContent.find({}, { data: 1 }).lean(),
     SiteSettings.find({}, { data: 1 }).lean(),
   ]);
-  products.forEach((p) => collectUploadUrls(p.images, refs));
-  categories.forEach((c) => collectUploadUrls(c.image, refs));
-  gallery.forEach((g) => collectUploadUrls(g.image, refs));
+  condos.forEach((c) => collectUploadUrls(c.images, refs));
+  posts.forEach((p) => collectUploadUrls(p.coverImage, refs));
   pages.forEach((p) => collectUploadUrls(p.data, refs));
   settings.forEach((s) => collectUploadUrls(s.data, refs));
   return refs;
@@ -83,12 +80,8 @@ export async function referencedUploadUrls(): Promise<Set<string>> {
 
 export async function isUploadReferenced(url: string): Promise<boolean> {
   await connectDB();
-  const [p, c, g] = await Promise.all([
-    Product.exists({ images: url }),
-    Category.exists({ image: url }),
-    GalleryItem.exists({ image: url }),
-  ]);
-  if (p || c || g) return true;
+  const [condo, post] = await Promise.all([Condo.exists({ images: url }), Post.exists({ coverImage: url })]);
+  if (condo || post) return true;
   const [pages, settings] = await Promise.all([
     PageContent.find({}, { data: 1 }).lean(),
     SiteSettings.find({}, { data: 1 }).lean(),

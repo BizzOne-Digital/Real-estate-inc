@@ -31,7 +31,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       >
         Skip to content
       </a>
-      <Header logo={settings.logo} logoAlt={settings.logoAlt} />
+      <Header logo={settings.logo} logoAlt={settings.logoAlt} searchUrl={settings.propertySearchUrl} />
       <main id="main" className="relative">
         {children}
       </main>

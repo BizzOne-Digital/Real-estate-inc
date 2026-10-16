@@ -53,9 +53,9 @@ export default async function AdminInquiriesPage({ searchParams }: { searchParam
                 <p className={cn("truncate text-sm", i.status === "new" ? "font-semibold" : "font-medium")}>
                   {i.name} <span className="font-normal text-gray-500">&lt;{i.email}&gt;</span>
                 </p>
-                <p className="truncate text-sm text-gray-700">{i.subject}</p>
+                <p className="truncate text-sm text-gray-700">{i.subject || i.interest}</p>
                 <p className="mt-0.5 truncate text-xs text-gray-500">
-                  {i.productName && <span className="mr-2 rounded bg-mist px-1.5 py-0.5 text-navy">{i.productName}</span>}
+                  {i.reference && <span className="mr-2 rounded bg-mist px-1.5 py-0.5 text-navy">{i.reference}</span>}
                   {i.message}
                 </p>
               </div>

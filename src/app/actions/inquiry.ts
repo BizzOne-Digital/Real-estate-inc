@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { connectDB } from "@/lib/db";
-import { Inquiry, Product } from "@/lib/models";
+import { Condo, Inquiry } from "@/lib/models";
 import { inquirySchema } from "@/lib/validation";
 
 export interface InquiryState {
@@ -17,14 +17,15 @@ export async function submitInquiry(_prev: InquiryState, formData: FormData): Pr
     name: String(formData.get("name") ?? ""),
     email: String(formData.get("email") ?? ""),
     phone: String(formData.get("phone") ?? ""),
-    subject: String(formData.get("subject") ?? ""),
-    product: String(formData.get("product") ?? ""),
+    interest: String(formData.get("interest") ?? ""),
+    reference: String(formData.get("reference") ?? ""),
+    condo: String(formData.get("condo") ?? ""),
     message: String(formData.get("message") ?? ""),
   };
 
   // Honeypot: real visitors never see or fill this field.
   if (String(formData.get("website") ?? "").trim() !== "") {
-    return { status: "success", message: "Thank you." };
+    return { status: "success", message: "" };
   }
 
   const parsed = inquirySchema.safeParse(raw);
@@ -44,23 +45,24 @@ export async function submitInquiry(_prev: InquiryState, formData: FormData): Pr
     if (recent >= 5) {
       return { status: "error", message: "You have sent several messages recently. Please try again later.", values: raw };
     }
-    let productId = null;
-    let productName = "";
-    if (d.product) {
-      const product = await Product.findOne({ slug: d.product, published: true }, { name: 1 }).lean();
-      if (product) {
-        productId = product._id;
-        productName = product.name;
+    let condoId = null;
+    let condoName = "";
+    if (d.condo) {
+      const condo = await Condo.findOne({ slug: d.condo, published: true }, { name: 1 }).lean();
+      if (condo) {
+        condoId = condo._id;
+        condoName = condo.name;
       }
     }
     await Inquiry.create({
       name: d.name,
       email: d.email,
       phone: d.phone,
-      subject: d.subject,
+      interest: d.interest,
+      subject: condoName ? `${d.interest}: ${condoName}` : d.interest,
+      reference: d.reference,
+      condo: condoId,
       message: d.message,
-      product: productId,
-      productName,
     });
     revalidatePath("/admin", "layout");
     return { status: "success", message: "" };
@@ -68,7 +70,7 @@ export async function submitInquiry(_prev: InquiryState, formData: FormData): Pr
     console.error("[inquiry] failed", err);
     return {
       status: "error",
-      message: "We could not send your message right now. Please try again in a moment.",
+      message: "We could not send your message right now. Please try again in a moment, or call us directly.",
       values: raw,
     };
   }

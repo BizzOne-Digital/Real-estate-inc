@@ -1,34 +1,65 @@
 import Link from "next/link";
-import { Mail, MapPin, Phone, Plus, Quote } from "lucide-react";
-import { ProductCard } from "@/components/catalog/ProductCard";
-import { SafeImage } from "@/components/ui/SafeImage";
+import { Mail, MapPin, Phone, Plus } from "lucide-react";
+import { CondoCard, ImageLinkCard, PostCard, TestimonialCard } from "@/components/realestate/Cards";
 import { ThinArrow } from "@/components/ui/Icons";
-import type { HomeContent, SiteSettingsData } from "@/lib/content-types";
-import type { GalleryItemT, ProductT } from "@/lib/types";
+import type { HomeContent, SiteSettingsData, Testimonial } from "@/lib/content-types";
+import type { CondoT, PostT } from "@/lib/types";
 import { SectionIntro } from "./SectionIntro";
 
-const outlineLink =
-  "group inline-flex w-fit items-center gap-3 border-b border-navy pb-1 text-[16px] text-navy";
+const outlineLink = "group inline-flex w-fit items-center gap-3 border-b border-navy pb-1 text-[16px] text-navy";
 
-export function FeaturedProducts({ content, products, currency }: { content: HomeContent; products: ProductT[]; currency: string }) {
-  if (!content.showFeatured || products.length === 0) return null;
+/** Three large photo cards, laid out like the reference "Find your kind of comfort" row. */
+export function ServicesSection({ content }: { content: HomeContent }) {
+  if (content.services.length === 0) return null;
   return (
-    <section aria-labelledby="featured-heading" className="bg-offwhite py-16 lg:py-24">
+    <section aria-labelledby="services-heading" className="bg-offwhite pb-3 pt-14 sm:pt-16 lg:pt-[72px]">
+      <div className="container-site mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between lg:mb-6">
+        <div>
+          {content.servicesEyebrow && (
+            <p className="eyebrow flex items-center gap-4">
+              {content.servicesEyebrow}
+              <span aria-hidden className="h-px w-12 bg-navy/70" />
+            </p>
+          )}
+          <h2
+            id="services-heading"
+            className="mt-4 font-display text-[clamp(2.4rem,4.2vw,3.4rem)] font-medium leading-none tracking-[-0.015em] text-navy"
+          >
+            {content.servicesHeading}
+          </h2>
+        </div>
+        {content.servicesText && <p className="max-w-[22rem] text-[15px] leading-relaxed text-ink/80 md:mb-1">{content.servicesText}</p>}
+      </div>
+      <ul className="mx-auto grid max-w-[1600px] gap-2.5 px-3 sm:grid-cols-2 lg:grid-cols-3 lg:px-5">
+        {content.services.map((card, i) => (
+          <li key={i} className={i === 2 && content.services.length === 3 ? "sm:col-span-2 lg:col-span-1" : undefined}>
+            <ImageLinkCard card={card} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" />
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+export function FeaturedCondos({ content, condos }: { content: HomeContent; condos: CondoT[] }) {
+  if (!content.showCondos || condos.length === 0) return null;
+  return (
+    <section aria-labelledby="condos-heading" className="bg-offwhite py-16 lg:py-24">
       <div className="container-site">
         <SectionIntro
-          id="featured-heading"
-          eyebrow={content.featuredEyebrow}
-          heading={content.featuredHeading}
-          text={content.featuredText}
+          id="condos-heading"
+          eyebrow={content.condosEyebrow}
+          heading={content.condosHeading}
+          text={content.condosText}
           action={
-            <Link href="/collections" className={outlineLink}>
-              {content.featuredButtonLabel} <ThinArrow className="btn-arrow" />
+            <Link href="/condos" className={outlineLink}>
+              {content.condosButtonLabel} <ThinArrow className="btn-arrow" />
             </Link>
           }
         />
-        <div className="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
-          {products.map((p) => (
-            <ProductCard key={p._id} product={p} currency={currency} />
+        <div className="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+          {condos.map((c) => (
+            <CondoCard key={c._id} condo={c} />
           ))}
         </div>
       </div>
@@ -56,40 +87,16 @@ export function ProcessSteps({ content }: { content: HomeContent }) {
   );
 }
 
-export function GalleryTeaser({ content, items }: { content: HomeContent; items: GalleryItemT[] }) {
-  if (!content.showGallery || items.length === 0) return null;
-  const shown = items.slice(0, 5);
+export function ToolsSection({ content }: { content: HomeContent }) {
+  if (!content.showTools || content.tools.length === 0) return null;
   return (
-    <section aria-labelledby="gallery-teaser-heading" className="bg-mist py-16 lg:py-24">
+    <section aria-labelledby="tools-heading" className="bg-mist py-16 lg:py-24">
       <div className="container-site">
-        <SectionIntro
-          id="gallery-teaser-heading"
-          eyebrow={content.galleryEyebrow}
-          heading={content.galleryHeading}
-          text={content.galleryText}
-          action={
-            <Link href="/gallery" className={outlineLink}>
-              {content.galleryButtonLabel} <ThinArrow className="btn-arrow" />
-            </Link>
-          }
-        />
-        <ul className="grid auto-rows-[180px] grid-cols-2 gap-3 sm:auto-rows-[220px] lg:grid-cols-4">
-          {shown.map((item, i) => (
-            <li key={item._id} className={i === 0 ? "col-span-2 row-span-2" : undefined}>
-              <Link href="/gallery" className="group relative block h-full overflow-hidden bg-mist-deep">
-                <SafeImage
-                  src={item.image}
-                  alt={item.alt || item.caption || "Interior inspiration"}
-                  fill
-                  sizes={i === 0 ? "(min-width: 1024px) 50vw, 100vw" : "(min-width: 1024px) 25vw, 50vw"}
-                  className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-                />
-                {item.caption && (
-                  <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 to-transparent px-4 pb-3 pt-10 font-display text-xl text-white">
-                    {item.caption}
-                  </span>
-                )}
-              </Link>
+        <SectionIntro id="tools-heading" eyebrow={content.toolsEyebrow} heading={content.toolsHeading} text={content.toolsText} />
+        <ul className="grid gap-4 md:grid-cols-3">
+          {content.tools.map((card, i) => (
+            <li key={i}>
+              <ImageLinkCard card={card} sizes="(min-width: 768px) 33vw, 100vw" />
             </li>
           ))}
         </ul>
@@ -98,20 +105,51 @@ export function GalleryTeaser({ content, items }: { content: HomeContent; items:
   );
 }
 
-/** Only real, admin-entered testimonials are shown; the section is hidden while the list is empty. */
-export function Testimonials({ content }: { content: HomeContent }) {
-  if (!content.showTestimonials || content.testimonials.length === 0) return null;
+export function LatestInsights({ content, posts }: { content: HomeContent; posts: PostT[] }) {
+  if (!content.showInsights || posts.length === 0) return null;
   return (
-    <section aria-labelledby="testimonials-heading" className="bg-offwhite py-16 lg:py-24">
+    <section aria-labelledby="insights-heading" className="bg-offwhite py-16 lg:py-24">
       <div className="container-site">
-        <SectionIntro id="testimonials-heading" eyebrow={content.testimonialsEyebrow} heading={content.testimonialsHeading} align="center" />
+        <SectionIntro
+          id="insights-heading"
+          eyebrow={content.insightsEyebrow}
+          heading={content.insightsHeading}
+          text={content.insightsText}
+          action={
+            <Link href="/market-insights" className={outlineLink}>
+              All insights <ThinArrow className="btn-arrow" />
+            </Link>
+          }
+        />
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {posts.map((p) => (
+            <PostCard key={p._id} post={p} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function TestimonialsTeaser({ content, testimonials }: { content: HomeContent; testimonials: Testimonial[] }) {
+  if (!content.showTestimonials || testimonials.length === 0) return null;
+  return (
+    <section aria-labelledby="testimonials-heading" className="border-t border-line bg-white py-16 lg:py-24">
+      <div className="container-site">
+        <SectionIntro
+          id="testimonials-heading"
+          eyebrow={content.testimonialsEyebrow}
+          heading={content.testimonialsHeading}
+          action={
+            <Link href="/testimonials" className={outlineLink}>
+              Read all reviews <ThinArrow className="btn-arrow" />
+            </Link>
+          }
+        />
         <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {content.testimonials.map((t, i) => (
-            <li key={i} className="flex flex-col border border-line bg-white p-8">
-              <Quote aria-hidden strokeWidth={1} className="h-8 w-8 text-navy/40" />
-              <blockquote className="mt-4 flex-1 font-display text-[1.35rem] leading-snug text-navy">&ldquo;{t.quote}&rdquo;</blockquote>
-              <p className="mt-6 font-sans text-sm font-medium text-ink">{t.name}</p>
-              {t.location && <p className="font-sans text-xs uppercase tracking-[0.16em] text-muted">{t.location}</p>}
+          {testimonials.slice(0, 3).map((t, i) => (
+            <li key={i}>
+              <TestimonialCard t={t} />
             </li>
           ))}
         </ul>
@@ -123,7 +161,7 @@ export function Testimonials({ content }: { content: HomeContent }) {
 export function Faq({ content }: { content: HomeContent }) {
   if (!content.showFaq || content.faqs.length === 0) return null;
   return (
-    <section aria-labelledby="faq-heading" className="border-t border-line bg-white py-16 lg:py-24">
+    <section aria-labelledby="faq-heading" className="border-t border-line bg-offwhite py-16 lg:py-24">
       <div className="container-site grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
         <div>
           <p className="eyebrow flex items-center gap-4">
@@ -154,17 +192,56 @@ export function Faq({ content }: { content: HomeContent }) {
   );
 }
 
-export function VisitStrip({ content, settings }: { content: HomeContent; settings: SiteSettingsData }) {
-  if (!content.showVisit) return null;
+export function ContactDetailsCard({ settings }: { settings: SiteSettingsData }) {
   const phones = [
     settings.contactPhone && { label: settings.contactPhone, number: settings.contactPhone },
     ...(settings.extraPhones ?? []).map((p) => ({ label: `${p.label ? `${p.label}: ` : ""}${p.number}`, number: p.number })),
   ].filter(Boolean) as { label: string; number: string }[];
-  const hasDetails = phones.length > 0 || settings.contactEmail || settings.contactAddress;
+  if (phones.length === 0 && !settings.contactEmail && !settings.contactAddress) return null;
+  return (
+    <ul className="grid gap-6 border border-line bg-white p-8 sm:grid-cols-2">
+      {phones.length > 0 && (
+        <li className="flex gap-4">
+          <Phone aria-hidden strokeWidth={1.25} className="mt-1 h-5 w-5 shrink-0 text-navy" />
+          <div>
+            <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-muted">Call</p>
+            {phones.map((p) => (
+              <a key={p.label} href={`tel:${p.number.replace(/[^\d+]/g, "")}`} className="mt-1 block text-[16px] text-navy hover:underline">
+                {p.label}
+              </a>
+            ))}
+          </div>
+        </li>
+      )}
+      {settings.contactEmail && (
+        <li className="flex gap-4">
+          <Mail aria-hidden strokeWidth={1.25} className="mt-1 h-5 w-5 shrink-0 text-navy" />
+          <div className="min-w-0">
+            <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-muted">Email</p>
+            <a href={`mailto:${settings.contactEmail}`} className="mt-1 block break-words text-[16px] text-navy hover:underline">
+              {settings.contactEmail}
+            </a>
+          </div>
+        </li>
+      )}
+      {settings.contactAddress && (
+        <li className="flex gap-4 sm:col-span-2">
+          <MapPin aria-hidden strokeWidth={1.25} className="mt-1 h-5 w-5 shrink-0 text-navy" />
+          <div>
+            <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-muted">Office</p>
+            <p className="mt-1 whitespace-pre-line text-[16px] text-ink">{settings.contactAddress}</p>
+          </div>
+        </li>
+      )}
+    </ul>
+  );
+}
 
+export function VisitStrip({ content, settings }: { content: HomeContent; settings: SiteSettingsData }) {
+  if (!content.showVisit) return null;
   return (
     <section aria-labelledby="visit-heading" className="bg-mist py-16 lg:py-20">
-      <div className="container-site grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-center lg:gap-20">
+      <div className="container-site grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-20">
         <div>
           <p className="eyebrow flex items-center gap-4">
             {content.visitEyebrow}
@@ -178,43 +255,7 @@ export function VisitStrip({ content, settings }: { content: HomeContent; settin
             {content.visitButtonLabel} <ThinArrow className="btn-arrow" />
           </Link>
         </div>
-        {hasDetails && (
-          <ul className="grid gap-6 border border-line bg-white p-8 sm:grid-cols-2">
-            {phones.length > 0 && (
-              <li className="flex gap-4">
-                <Phone aria-hidden strokeWidth={1.25} className="mt-1 h-5 w-5 shrink-0 text-navy" />
-                <div>
-                  <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-muted">Call</p>
-                  {phones.map((p) => (
-                    <a key={p.label} href={`tel:${p.number.replace(/[^\d+]/g, "")}`} className="mt-1 block text-[16px] text-navy hover:underline">
-                      {p.label}
-                    </a>
-                  ))}
-                </div>
-              </li>
-            )}
-            {settings.contactEmail && (
-              <li className="flex gap-4">
-                <Mail aria-hidden strokeWidth={1.25} className="mt-1 h-5 w-5 shrink-0 text-navy" />
-                <div className="min-w-0">
-                  <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-muted">Email</p>
-                  <a href={`mailto:${settings.contactEmail}`} className="mt-1 block break-words text-[16px] text-navy hover:underline">
-                    {settings.contactEmail}
-                  </a>
-                </div>
-              </li>
-            )}
-            {settings.contactAddress && (
-              <li className="flex gap-4 sm:col-span-2">
-                <MapPin aria-hidden strokeWidth={1.25} className="mt-1 h-5 w-5 shrink-0 text-navy" />
-                <div>
-                  <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-muted">Visit</p>
-                  <p className="mt-1 whitespace-pre-line text-[16px] text-ink">{settings.contactAddress}</p>
-                </div>
-              </li>
-            )}
-          </ul>
-        )}
+        <ContactDetailsCard settings={settings} />
       </div>
     </section>
   );

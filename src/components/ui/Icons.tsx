@@ -1,7 +1,35 @@
-import { Feather, Gem, Hammer, Home, Leaf, Ruler, Sofa, Sparkles, Sun, type LucideProps } from "lucide-react";
+import {
+  Building2,
+  Calculator,
+  Feather,
+  Gem,
+  Handshake,
+  Home,
+  KeyRound,
+  Leaf,
+  MapPin,
+  Plane,
+  ShieldCheck,
+  Sparkles,
+  Sun,
+  type LucideProps,
+} from "lucide-react";
 import type { BenefitIcon as BenefitIconName } from "@/lib/content-types";
 
-const MAP = { leaf: Leaf, gem: Gem, home: Home, sofa: Sofa, ruler: Ruler, sparkles: Sparkles, hammer: Hammer, sun: Sun };
+const MAP = {
+  shield: ShieldCheck,
+  map: MapPin,
+  key: KeyRound,
+  handshake: Handshake,
+  building: Building2,
+  plane: Plane,
+  calculator: Calculator,
+  home: Home,
+  leaf: Leaf,
+  gem: Gem,
+  sparkles: Sparkles,
+  sun: Sun,
+};
 
 export function BenefitIcon({ name, ...props }: { name: BenefitIconName } & LucideProps) {
   const Icon = MAP[name] ?? Feather;

@@ -43,7 +43,12 @@ export function SettingsForm({ initial }: { initial: SiteSettingsData }) {
           help="Upload the original logo file (PNG with transparency recommended). It is displayed without recoloring."
           onBusyChange={setUploading}
         />
-        <TextField label="Logo alt text / business name" value={v.logoAlt} onChange={(x) => set("logoAlt", x)} max={120} required />
+        <TextField label="Logo alt text" value={v.logoAlt} onChange={(x) => set("logoAlt", x)} max={120} required />
+        <div className="grid gap-4 sm:grid-cols-2">
+          <TextField label="Agent name" value={v.agentName} onChange={(x) => set("agentName", x)} max={120} />
+          <TextField label="Agent title" value={v.agentTitle} onChange={(x) => set("agentTitle", x)} max={120} placeholder="Broker" />
+        </div>
+        <TextField label="Brokerage name" value={v.brokerageName} onChange={(x) => set("brokerageName", x)} max={160} help="Shown in the footer, contact page and copyright line." />
       </FormSection>
 
       <FormSection title="Contact details" description="Each detail is shown on the website only when filled in.">
@@ -69,6 +74,11 @@ export function SettingsForm({ initial }: { initial: SiteSettingsData }) {
         <TextField label="Opening hours" value={v.contactHours} onChange={(x) => set("contactHours", x)} max={200} />
       </FormSection>
 
+      <FormSection title="Property links" description="Where the Search Properties buttons and featured listings links go.">
+        <TextField label="Property search URL" value={v.propertySearchUrl} onChange={(x) => set("propertySearchUrl", x)} max={300} help="Used by every Search Properties button. Opens in a new tab." />
+        <TextField label="Featured listings URL" value={v.featuredListingsUrl} onChange={(x) => set("featuredListingsUrl", x)} max={300} help="Shown on the Featured Properties page." />
+      </FormSection>
+
       <FormSection title="Social links" description="Icons are hidden in the footer until a URL is added.">
         <div className="grid gap-4 sm:grid-cols-2">
           <TextField label="Instagram URL" value={v.social.instagram} onChange={(x) => setSocial("instagram", x)} max={300} placeholder="https://instagram.com/…" />
@@ -78,9 +88,8 @@ export function SettingsForm({ initial }: { initial: SiteSettingsData }) {
         </div>
       </FormSection>
 
-      <FormSection title="Footer & catalog">
+      <FormSection title="Footer">
         <TextField label="Footer text" value={v.footerText} onChange={(x) => set("footerText", x)} max={300} />
-        <TextField label="Price currency" value={v.currency} onChange={(x) => set("currency", x)} max={3} help="3-letter code, e.g. CAD or USD. Prices only appear on products that have one." />
       </FormSection>
 
       <FormSection title="Default SEO">

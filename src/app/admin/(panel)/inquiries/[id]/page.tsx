@@ -14,16 +14,16 @@ export default async function InquiryDetailPage({ params }: { params: Promise<{ 
   const { id } = await params;
   if (!/^[a-f0-9]{24}$/i.test(id)) notFound();
   await connectDB();
-  const doc = await Inquiry.findById(id).populate("product", "name slug published").lean();
+  const doc = await Inquiry.findById(id).populate("condo", "name slug published").lean();
   if (!doc) notFound();
-  const inq = plain<InquiryT & { product: { _id: string; name: string; slug: string; published: boolean } | null }>(doc);
+  const inq = plain<InquiryT>(doc);
 
   return (
     <>
       <Link href="/admin/inquiries" className="mb-4 inline-flex items-center gap-1 text-sm text-gray-600 hover:text-navy">
         <ArrowLeft aria-hidden className="h-4 w-4" /> All inquiries
       </Link>
-      <AdminPageTitle title={inq.subject} actions={<StatusBadge status={inq.status} />} />
+      <AdminPageTitle title={inq.subject || inq.interest || "Inquiry"} actions={<StatusBadge status={inq.status} />} />
       <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
         <article className="admin-card p-5">
           <p className="whitespace-pre-wrap text-[15px] leading-relaxed text-gray-800">{inq.message}</p>
@@ -50,23 +50,31 @@ export default async function InquiryDetailPage({ params }: { params: Promise<{ 
               </a>
             </div>
           )}
-          {(inq.product || inq.productName) && (
+          {inq.interest && (
             <div>
-              <p className="text-xs uppercase tracking-wide text-gray-500">Product</p>
-              {inq.product ? (
-                <div className="flex items-center gap-2">
-                  <Link href={`/admin/products/${inq.product._id}`} className="text-navy hover:underline">
-                    {inq.product.name}
+              <p className="text-xs uppercase tracking-wide text-gray-500">Interested in</p>
+              <p>{inq.interest}</p>
+            </div>
+          )}
+          {inq.condo && (
+            <div>
+              <p className="text-xs uppercase tracking-wide text-gray-500">Condo building</p>
+              <div className="flex items-center gap-2">
+                <Link href={`/admin/condos/${inq.condo._id}`} className="text-navy hover:underline">
+                  {inq.condo.name}
+                </Link>
+                {inq.condo.published && (
+                  <Link href={`/condos/${inq.condo.slug}`} target="_blank" aria-label="View building page" className="text-gray-500 hover:text-navy">
+                    <ExternalLink aria-hidden className="h-3.5 w-3.5" />
                   </Link>
-                  {inq.product.published && (
-                    <Link href={`/products/${inq.product.slug}`} target="_blank" aria-label="View product on website" className="text-gray-500 hover:text-navy">
-                      <ExternalLink aria-hidden className="h-3.5 w-3.5" />
-                    </Link>
-                  )}
-                </div>
-              ) : (
-                <p>{inq.productName} <span className="text-gray-500">(deleted)</span></p>
-              )}
+                )}
+              </div>
+            </div>
+          )}
+          {inq.reference && (
+            <div>
+              <p className="text-xs uppercase tracking-wide text-gray-500">Property reference</p>
+              <p className="break-words">{inq.reference}</p>
             </div>
           )}
           <div>

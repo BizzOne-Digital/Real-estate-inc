@@ -1,0 +1,118 @@
+{
+  "generator": "Built-in image_gen",
+  "note": "AI-generated editorial illustrations. Condo images are temporary fictional placeholders, not photos of Absolute or Essex. Obtain real building photos from Nadeem and replace through Admin > Condos > Edit > Building photos.",
+  "assets": [
+    {
+      "file": "public/images/re/hero-house.webp",
+      "width": 2400,
+      "height": 1500,
+      "temporaryCondoPlaceholder": false,
+      "prompt": "Use case: photorealistic-natural. Asset: standalone real estate website photograph, 2400x1500 pixels, landscape composition. Wide architectural photograph of a two-storey red-brick detached family home in a Mississauga Ontario suburb, double attached garage, broad neat green lawn, modest mature trees and planted beds, clean driveway, golden-hour summer light. Full house and grounds in frame with generous space around roof, authentic upscale Canadian suburban architecture, no visible address, no sale signs. Cohesive professional photographic quality, true-to-life materials and lighting, natural color grading, clean carefully composed crop-safe frame. No logos, no watermarks, no website UI, no collage, no decorative border, no readable text."
+    },
+    {
+      "file": "public/images/re/service-buying.webp",
+      "width": 1600,
+      "height": 1200,
+      "temporaryCondoPlaceholder": false,
+      "prompt": "Use case: photorealistic-natural. Asset: standalone real estate website photograph, 1600x1200 pixels, landscape composition. Bright welcoming Canadian family home exterior with a generous front porch, pale stone and brick facade, front steps and attractive flowers, lush summer garden, blue sky and soft sunshine. Complete home visible, inviting, realistic residential architecture. Cohesive professional photographic quality, true-to-life materials and lighting, natural color grading, clean carefully composed crop-safe frame. No logos, no watermarks, no website UI, no collage, no decorative border, no readable text."
+    },
+    {
+      "file": "public/images/re/service-selling.webp",
+      "width": 1600,
+      "height": 1200,
+      "temporaryCondoPlaceholder": false,
+      "prompt": "Use case: photorealistic-natural. Asset: standalone real estate website photograph, 1600x1200 pixels, landscape composition. Beautiful still life of two metal house keys on a simple unbranded keyring on a warm natural wooden table beside a small neutral wooden house model. Soft blurred home interior background, window daylight, premium editorial real estate photography, clear uncluttered focal point. Cohesive professional photographic quality, true-to-life materials and lighting, natural color grading, clean carefully composed crop-safe frame. No logos, no watermarks, no website UI, no collage, no decorative border, no readable text."
+    },
+    {
+      "file": "public/images/re/toronto-skyline.webp",
+      "width": 2400,
+      "height": 1500,
+      "temporaryCondoPlaceholder": false,
+      "prompt": "Use case: photorealistic-natural. Asset: standalone real estate website photograph, 2400x1500 pixels, landscape composition. Geographically credible Toronto skyline including the recognizable CN Tower and downtown buildings, photographed across Lake Ontario from the Toronto Islands, spectacular soft peach and blue sunset sky reflected in calm lake water. Wide panoramic composition with complete tower and generous sky, realistic cityscape travel photography. Cohesive professional photographic quality, true-to-life materials and lighting, natural color grading, clean carefully composed crop-safe frame. No logos, no watermarks, no website UI, no collage, no decorative border, no readable text."
+    },
+    {
+      "file": "public/images/re/about-story.webp",
+      "width": 1200,
+      "height": 1500,
+      "temporaryCondoPlaceholder": false,
+      "prompt": "Use case: photorealistic-natural. Asset: standalone real estate website photograph, 1200x1500 pixels, vertical portrait composition. Portrait vertical editorial photograph of a quiet tree-lined residential street in the Greater Toronto Area Ontario, detached brick houses set back behind gardens, beautiful mature maple trees with red orange and golden autumn leaves, clear residential street leading into distance, soft afternoon light, authentic peaceful Canadian neighborhood, no visible addresses or license plates. Cohesive professional photographic quality, true-to-life materials and lighting, natural color grading, clean carefully composed crop-safe frame. No logos, no watermarks, no website UI, no collage, no decorative border, no readable text."
+    },
+    {
+      "file": "public/images/re/featured-home.webp",
+      "width": 2400,
+      "height": 1500,
+      "temporaryCondoPlaceholder": false,
+      "prompt": "Use case: photorealistic-natural. Asset: standalone real estate website photograph, 2400x1500 pixels, landscape composition. Premium modern Canadian family detached home with tasteful stone and brick facade, landscaped front yard, ornamental grasses and neat lawn, photographed at early blue-hour evening with warm interior lights glowing through windows. Full house shown, architectural wide shot with balanced natural sky, elegant real estate editorial photography. Cohesive professional photographic quality, true-to-life materials and lighting, natural color grading, clean carefully composed crop-safe frame. No logos, no watermarks, no website UI, no collage, no decorative border, no readable text."
+    },
+    {
+      "file": "public/images/re/condo-towers-1.webp",
+      "width": 1600,
+      "height": 1200,
+      "temporaryCondoPlaceholder": true,
+      "prompt": "Use case: photorealistic-natural. Asset: standalone real estate website photograph, 1600x1200 pixels, landscape composition. Generic fictional modern residential glass condominium towers against a clean blue sky, low-angle architectural photograph, elegant reflective glazing and balconies, realistic Canadian city setting. This is a temporary illustrative building image, NOT any actual named building. Do not depict recognizable Absolute World twisting towers or Essex buildings, no signage, no address, no text. Cohesive professional photographic quality, true-to-life materials and lighting, natural color grading, clean carefully composed crop-safe frame. No logos, no watermarks, no website UI, no collage, no decorative border, no readable text."
+    },
+    {
+      "file": "public/images/re/condo-towers-2.webp",
+      "width": 1600,
+      "height": 1200,
+      "temporaryCondoPlaceholder": true,
+      "prompt": "Use case: photorealistic-natural. Asset: standalone real estate website photograph, 1600x1200 pixels, landscape composition. Generic fictional luxury condominium amenity area: beautiful indoor lap pool with turquoise water, floor-to-ceiling windows, refined pale stone flooring, a few carefully aligned loungers, greenery outside. Wide architectural interior photograph, natural daylight, absolutely no people. Temporary illustrative amenity, not documentation of any actual named condo, no signage. Cohesive professional photographic quality, true-to-life materials and lighting, natural color grading, clean carefully composed crop-safe frame. No logos, no watermarks, no website UI, no collage, no decorative border, no readable text."
+    },
+    {
+      "file": "public/images/re/condo-midrise-1.webp",
+      "width": 1600,
+      "height": 1200,
+      "temporaryCondoPlaceholder": true,
+      "prompt": "Use case: photorealistic-natural. Asset: standalone real estate website photograph, 1600x1200 pixels, landscape composition. Generic fictional Canadian mid-rise condominium residential building, six to eight stories, tasteful red brick and glass facade, individual balconies and a landscaped garden with trees and planted beds in foreground, bright clear daylight, realistic architecture. Temporary illustrative building, not the actual Essex or any named building. No signage, no text, no address. Cohesive professional photographic quality, true-to-life materials and lighting, natural color grading, clean carefully composed crop-safe frame. No logos, no watermarks, no website UI, no collage, no decorative border, no readable text."
+    },
+    {
+      "file": "public/images/re/condo-midrise-2.webp",
+      "width": 1600,
+      "height": 1200,
+      "temporaryCondoPlaceholder": true,
+      "prompt": "Use case: photorealistic-natural. Asset: standalone real estate website photograph, 1600x1200 pixels, landscape composition. Generic fictional elegant condominium concierge lobby with polished pale stone floor, warm walnut wall panels, tasteful reception desk, understated lounge seating and carefully arranged plants, natural light through tall glass entrance. Realistic luxury architectural interior photograph, no people, no signage, no text. Temporary illustrative lobby, not an actual named condo. Cohesive professional photographic quality, true-to-life materials and lighting, natural color grading, clean carefully composed crop-safe frame. No logos, no watermarks, no website UI, no collage, no decorative border, no readable text."
+    },
+    {
+      "file": "public/images/re/mortgage.webp",
+      "width": 2400,
+      "height": 1500,
+      "temporaryCondoPlaceholder": false,
+      "prompt": "Use case: photorealistic-natural. Asset: standalone real estate website photograph, 2400x1500 pixels, landscape composition. Premium editorial mortgage desk still life: simple calculator, neat generic mortgage paperwork with blurred unreadable print, elegant dark pen, tidy light oak desk, natural window daylight, restrained cream and navy tones, house key subtly beside documents. Wide photographic composition, professional and trustworthy, no readable financial figures, no brands. Cohesive professional photographic quality, true-to-life materials and lighting, natural color grading, clean carefully composed crop-safe frame. No logos, no watermarks, no website UI, no collage, no decorative border, no readable text."
+    },
+    {
+      "file": "public/images/re/land-transfer-tax.webp",
+      "width": 2400,
+      "height": 1500,
+      "temporaryCondoPlaceholder": false,
+      "prompt": "Use case: photorealistic-natural. Asset: standalone real estate website photograph, 2400x1500 pixels, landscape composition. Close-up realistic adult hand holding a pen signing generic real estate closing documents on a warm desk, shallow depth of field, natural soft window light, refined professional editorial photography, papers with softly blurred unreadable print, no readable private details. Hands only, no face, anatomically correct hand, wide composition. Cohesive professional photographic quality, true-to-life materials and lighting, natural color grading, clean carefully composed crop-safe frame. No logos, no watermarks, no website UI, no collage, no decorative border, no readable text."
+    },
+    {
+      "file": "public/images/re/insights.webp",
+      "width": 1600,
+      "height": 1200,
+      "temporaryCondoPlaceholder": false,
+      "prompt": "Use case: photorealistic-natural. Asset: standalone real estate website photograph, 1600x1200 pixels, landscape composition. Attractive row of detached suburban Greater Toronto Area Ontario homes along a quiet street on a sunny summer day, red brick and pale stone houses, well-kept lawns and mature maples, blue sky, natural authentic Canadian neighborhood. Wide residential editorial photograph, no visible address, no readable license plates. Cohesive professional photographic quality, true-to-life materials and lighting, natural color grading, clean carefully composed crop-safe frame. No logos, no watermarks, no website UI, no collage, no decorative border, no readable text."
+    },
+    {
+      "file": "public/images/re/article-prepare-home.webp",
+      "width": 1920,
+      "height": 1080,
+      "temporaryCondoPlaceholder": false,
+      "prompt": "Use case: photorealistic-natural. Asset: standalone real estate website photograph, 1920x1080 pixels, landscape composition. Bright beautifully decluttered staged living room ready for a home sale: neutral cream sofa, natural wood coffee table, subtle ceramic vase, light rug, large sunny windows, tasteful muted artwork, clean uncluttered surfaces. Contemporary Canadian family home interior, wide real estate editorial photograph, realistic welcoming everyday luxury. Cohesive professional photographic quality, true-to-life materials and lighting, natural color grading, clean carefully composed crop-safe frame. No logos, no watermarks, no website UI, no collage, no decorative border, no readable text."
+    },
+    {
+      "file": "public/images/re/article-closing-costs.webp",
+      "width": 1920,
+      "height": 1080,
+      "temporaryCondoPlaceholder": false,
+      "prompt": "Use case: photorealistic-natural. Asset: standalone real estate website photograph, 1920x1080 pixels, landscape composition. Photorealistic overhead editorial desk still life of a completed home purchase agreement with a small abstract unreadable signature mark, house keys and a simple calculator arranged carefully on a light wood desk. Natural daylight, tasteful cream and navy palette, sharp real object detail, paperwork print not legible, no identifying names, brands or actual financial figures. Cohesive professional photographic quality, true-to-life materials and lighting, natural color grading, clean carefully composed crop-safe frame. No logos, no watermarks, no website UI, no collage, no decorative border, no readable text."
+    },
+    {
+      "file": "public/images/re/article-why-agent.webp",
+      "width": 1920,
+      "height": 1080,
+      "temporaryCondoPlaceholder": false,
+      "prompt": "Use case: photorealistic-natural. Asset: standalone real estate website photograph, 1920x1080 pixels, landscape composition. Close-up professional handshake between two adults over neatly spread residential house floor plans on a wooden table, one person in a navy suit sleeve and one in light neutral sleeve, house keys beside plans. Hands and forearms only, no faces, anatomically accurate hands and fingers, natural window daylight, warm professional real estate editorial photograph, no readable text or logos. Cohesive professional photographic quality, true-to-life materials and lighting, natural color grading, clean carefully composed crop-safe frame. No logos, no watermarks, no website UI, no collage, no decorative border, no readable text."
+    }
+  ]
+}

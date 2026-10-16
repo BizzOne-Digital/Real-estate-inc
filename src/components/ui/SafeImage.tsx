@@ -2,13 +2,12 @@
 
 import Image, { type ImageLoaderProps, type ImageProps } from "next/image";
 import { useState } from "react";
-import { resolveImageSrc } from "@/lib/generated-images";
 
 export const PLACEHOLDER_SRC = "/placeholder.svg";
 
 const UNSPLASH_RE = /^https:\/\/images\.unsplash\.com\/[A-Za-z0-9_\-./]+(\?.*)?$/;
-const OWNED_UPLOAD_RE = /^\/api\/uploads\/(products|gallery|pages|misc)\/[A-Za-z0-9.\-]+$/;
-const BUNDLED_RE = /^\/images\/[a-z0-9]+(?:-[a-z0-9]+)*\.webp$/;
+const OWNED_UPLOAD_RE = /^\/api\/uploads\/(condos|posts|pages|misc|products|gallery)\/[A-Za-z0-9.\-]+$/;
+const BUNDLED_RE = /^\/images\/(?:re\/)?[a-z0-9]+(?:-[a-z0-9]+)*\.webp$/;
 const STATIC_RE = /^\/(brand\/[A-Za-z0-9.\-_]+|placeholder\.svg)$/;
 
 /** Only Unsplash, owned uploads and bundled assets are valid. Legacy /uploads/... paths are not. */
@@ -29,7 +28,7 @@ type Props = Omit<ImageProps, "src" | "alt"> & { src?: string | null; alt: strin
 
 /** next/image wrapper with a single, loop-safe fallback to a neutral placeholder. */
 export function SafeImage({ src, alt, unoptimized, ...rest }: Props) {
-  const resolvedSrc = typeof src === "string" ? resolveImageSrc(src) : src;
+  const resolvedSrc = src;
   // Remember which source failed so a new src gets a fresh attempt, and the placeholder never loops.
   const [failedSrc, setFailedSrc] = useState<string | null>(null);
   const current = isRenderableSrc(resolvedSrc) && failedSrc !== resolvedSrc ? resolvedSrc : PLACEHOLDER_SRC;

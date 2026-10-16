@@ -1,5 +1,5 @@
 /**
- * Idempotent seed: inserts sample categories, products, gallery items, page content and
+ * Idempotent seed: inserts starter condo pages, Market Insights articles, page content and
  * settings ONLY where they do not already exist. It never overwrites admin edits and is
  * never run automatically when the app starts.
  *
@@ -10,72 +10,47 @@ import { connectDB } from "../src/lib/db";
 import {
   AdminSession,
   AdminUser,
-  Category,
-  GalleryItem,
+  Condo,
   Inquiry,
   PageContent,
-  Product,
+  Post,
   SiteSettings,
   StoredUpload,
   UploadChunk,
   UploadSession,
+  type PageKey,
 } from "../src/lib/models";
-import {
-  DEFAULT_ABOUT,
-  DEFAULT_COLLECTIONS,
-  DEFAULT_CONTACT,
-  DEFAULT_GALLERY,
-  DEFAULT_HOME,
-  DEFAULT_SETTINGS,
-} from "../src/lib/content-types";
-import { SAMPLE_CATEGORIES, SAMPLE_GALLERY, SAMPLE_PRODUCTS } from "./seed-data";
+import { DEFAULT_SETTINGS } from "../src/lib/content-types";
+import { PAGE_DEFAULTS } from "../src/lib/page-defaults";
+import { SAMPLE_CONDOS, SAMPLE_POSTS } from "./seed-data";
 
 export async function seed(log = console.log) {
   await connectDB();
   // Make sure all indexes (unique slugs, TTLs) exist.
-  for (const m of [AdminUser, AdminSession, Category, Product, GalleryItem, PageContent, SiteSettings, Inquiry, StoredUpload, UploadSession, UploadChunk]) {
+  for (const m of [AdminUser, AdminSession, Condo, Post, PageContent, SiteSettings, Inquiry, StoredUpload, UploadSession, UploadChunk]) {
     await (m as mongoose.Model<unknown>).createIndexes();
   }
 
   let created = 0;
-  for (const c of SAMPLE_CATEGORIES) {
-    const res = await Category.updateOne({ slug: c.slug }, { $setOnInsert: { ...c, showOnHome: true } }, { upsert: true });
+  for (const c of SAMPLE_CONDOS) {
+    const res = await Condo.updateOne({ slug: c.slug }, { $setOnInsert: { ...c, published: true } }, { upsert: true });
     created += res.upsertedCount;
   }
-  log(`Categories: ${created} created, ${SAMPLE_CATEGORIES.length - created} already present.`);
-
-  const cats = await Category.find({ slug: { $in: SAMPLE_CATEGORIES.map((c) => c.slug) } }, { slug: 1 }).lean();
-  const catId = new Map(cats.map((c) => [c.slug, c._id]));
+  log(`Condos: ${created} created, ${SAMPLE_CONDOS.length - created} already present.`);
 
   created = 0;
-  for (const p of SAMPLE_PRODUCTS) {
-    const category = catId.get(p.category);
-    if (!category) continue;
-    const res = await Product.updateOne(
+  const now = Date.now();
+  for (const [i, p] of SAMPLE_POSTS.entries()) {
+    const res = await Post.updateOne(
       { slug: p.slug },
-      { $setOnInsert: { ...p, category, price: null, featured: Boolean(p.featured), published: true } },
+      { $setOnInsert: { ...p, published: true, publishedAt: new Date(now - i * 86_400_000) } },
       { upsert: true },
     );
     created += res.upsertedCount;
   }
-  log(`Products: ${created} created, ${SAMPLE_PRODUCTS.length - created} already present.`);
+  log(`Market Insights: ${created} created, ${SAMPLE_POSTS.length - created} already present.`);
 
-  if ((await GalleryItem.estimatedDocumentCount()) === 0) {
-    await GalleryItem.insertMany(
-      SAMPLE_GALLERY.map((g, order) => ({ ...g, category: g.category ? (catId.get(g.category) ?? null) : null, order })),
-    );
-    log(`Gallery: ${SAMPLE_GALLERY.length} items created.`);
-  } else {
-    log("Gallery: already has items, skipped.");
-  }
-
-  for (const [key, data] of [
-    ["home", DEFAULT_HOME],
-    ["about", DEFAULT_ABOUT],
-    ["contact", DEFAULT_CONTACT],
-    ["collections", DEFAULT_COLLECTIONS],
-    ["gallery", DEFAULT_GALLERY],
-  ] as const) {
+  for (const [key, data] of Object.entries(PAGE_DEFAULTS) as [PageKey, object][]) {
     const res = await PageContent.updateOne({ key }, { $setOnInsert: { key, data } }, { upsert: true });
     log(`Page "${key}": ${res.upsertedCount ? "created" : "already present, left unchanged"}.`);
   }

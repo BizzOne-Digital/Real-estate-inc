@@ -3,7 +3,19 @@ import { ThinArrow } from "@/components/ui/Icons";
 import { safeHref } from "@/lib/utils";
 
 /** Full-width navy call-to-action band with an understated botanical shadow. */
-export function CtaBand({ heading, buttonLabel, buttonHref }: { heading: string; buttonLabel: string; buttonHref: string }) {
+export function CtaBand({
+  heading,
+  text,
+  buttonLabel,
+  buttonHref,
+}: {
+  heading: string;
+  text?: string;
+  buttonLabel: string;
+  buttonHref: string;
+}) {
+  const href = safeHref(buttonHref) ?? "/contact";
+  const external = /^https?:\/\//.test(href);
   return (
     <section aria-labelledby="cta-heading" className="relative overflow-hidden bg-navy">
       <svg
@@ -23,9 +35,16 @@ export function CtaBand({ heading, buttonLabel, buttonHref }: { heading: string;
         <h2 id="cta-heading" className="font-display text-[clamp(2.2rem,4vw,3.15rem)] font-medium leading-tight text-white">
           {heading}
         </h2>
-        <Link href={safeHref(buttonHref) ?? "/collections"} className="btn-outline-light group">
-          {buttonLabel} <ThinArrow className="btn-arrow" />
-        </Link>
+        {text && <p className="-mt-2 max-w-xl text-[16px] leading-relaxed text-white/80">{text}</p>}
+        {external ? (
+          <a href={href} target="_blank" rel="noopener noreferrer" className="btn-outline-light group">
+            {buttonLabel} <ThinArrow className="btn-arrow" />
+          </a>
+        ) : (
+          <Link href={href} className="btn-outline-light group">
+            {buttonLabel} <ThinArrow className="btn-arrow" />
+          </Link>
+        )}
       </div>
     </section>
   );

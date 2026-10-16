@@ -4,15 +4,18 @@ import { connectDB } from "@/lib/db";
 import { Inquiry, PageContent, SiteSettings, type PageKey } from "@/lib/models";
 import { ActionError, assertObjectId, guarded, revalidateContent } from "@/lib/admin-action";
 import { cleanupOrphanUploads, cleanupReplacedUploads } from "@/lib/uploads";
-import { aboutSchema, collectionsPageSchema, contactPageSchema, galleryPageSchema, homeSchema, settingsSchema } from "@/lib/validation";
+import { aboutSchema, contactPageSchema, homeSchema, infoPageSchema, settingsSchema, testimonialsPageSchema } from "@/lib/validation";
 import { revalidatePath } from "next/cache";
 
 const PAGE_SCHEMAS = {
   home: homeSchema,
   about: aboutSchema,
   contact: contactPageSchema,
-  collections: collectionsPageSchema,
-  gallery: galleryPageSchema,
+  featured: infoPageSchema,
+  relocation: infoPageSchema,
+  mortgage: infoPageSchema,
+  "land-transfer-tax": infoPageSchema,
+  testimonials: testimonialsPageSchema,
 } as const;
 
 export async function savePageContent(key: PageKey, input: unknown) {

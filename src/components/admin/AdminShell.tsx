@@ -3,29 +3,16 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import {
-  ExternalLink,
-  FileText,
-  FolderTree,
-  Images,
-  LayoutDashboard,
-  LogOut,
-  Mail,
-  Menu,
-  Package,
-  Settings,
-  X,
-} from "lucide-react";
+import { Building2, ExternalLink, FileText, LayoutDashboard, LogOut, Mail, Menu, Newspaper, Settings, X } from "lucide-react";
 import { logout } from "@/app/admin/actions/auth";
 import { cn } from "@/lib/utils";
 
 const NAV = [
   { href: "/admin", label: "Dashboard", Icon: LayoutDashboard },
-  { href: "/admin/products", label: "Products", Icon: Package },
-  { href: "/admin/categories", label: "Categories", Icon: FolderTree },
-  { href: "/admin/gallery", label: "Gallery", Icon: Images },
-  { href: "/admin/pages", label: "Page Content", Icon: FileText },
   { href: "/admin/inquiries", label: "Inquiries", Icon: Mail },
+  { href: "/admin/condos", label: "Condos", Icon: Building2 },
+  { href: "/admin/insights", label: "Market Insights", Icon: Newspaper },
+  { href: "/admin/pages", label: "Page Content", Icon: FileText },
   { href: "/admin/settings", label: "Settings", Icon: Settings },
 ];
 
@@ -94,14 +81,14 @@ export function AdminShell({
     <div className="min-h-screen lg:grid lg:grid-cols-[240px_1fr]">
       <aside className="sticky top-0 hidden h-screen flex-col bg-navy-deep lg:flex">
         <div className="border-b border-white/10 px-6 py-5">
-          <p className="font-display text-2xl text-white">Studio Admin</p>
-          <p className="text-xs text-white/60">Furniture &amp; Interiors</p>
+          <p className="font-display text-2xl text-white">Website Admin</p>
+          <p className="text-xs text-white/60">Discover Real Estate Inc.</p>
         </div>
         {nav}
       </aside>
 
       <div className="flex items-center justify-between bg-navy-deep px-4 py-3 lg:hidden">
-        <p className="font-display text-xl text-white">Studio Admin</p>
+        <p className="font-display text-xl text-white">Website Admin</p>
         <button
           type="button"
           onClick={() => setOpen(true)}
@@ -117,7 +104,7 @@ export function AdminShell({
           <div className="absolute inset-0 bg-black/40" onClick={() => setOpen(false)} />
           <div className="absolute inset-y-0 left-0 flex w-72 flex-col bg-navy-deep shadow-xl">
             <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
-              <p className="font-display text-xl text-white">Studio Admin</p>
+              <p className="font-display text-xl text-white">Website Admin</p>
               <button type="button" onClick={() => setOpen(false)} aria-label="Close admin menu" className="rounded p-2 text-white hover:bg-white/10" autoFocus>
                 <X aria-hidden className="h-5 w-5" />
               </button>

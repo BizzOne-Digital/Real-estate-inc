@@ -1,6 +1,15 @@
 import { Schema, model, models, type Model } from "mongoose";
 
-export const PAGE_KEYS = ["home", "about", "contact", "collections", "gallery"] as const;
+export const PAGE_KEYS = [
+  "home",
+  "about",
+  "contact",
+  "featured",
+  "relocation",
+  "mortgage",
+  "land-transfer-tax",
+  "testimonials",
+] as const;
 export type PageKey = (typeof PAGE_KEYS)[number];
 
 export interface PageContentDoc {

@@ -21,7 +21,7 @@ const PORT = 3123;
 const BASE = `http://localhost:${PORT}`;
 const ADMIN_EMAIL = "verify-admin@example.test";
 const ADMIN_PASSWORD = `Verify-${Math.random().toString(36).slice(2)}-Pass!`;
-const SHOTS = process.env.SCREENSHOT_DIR || path.join(tmpdir(), "furniture-verify-shots");
+const SHOTS = process.env.SCREENSHOT_DIR || path.join(tmpdir(), "realestate-verify-shots");
 
 const results: { name: string; ok: boolean; detail?: string }[] = [];
 const shot = (name: string) => path.join(SHOTS, `${name}.png`) as `${string}.png`;
@@ -110,26 +110,37 @@ async function main() {
   mkdirSync(SHOTS, { recursive: true });
   // Start with an empty Next.js data cache so results from previous runs cannot leak in.
   rmSync(path.join(process.cwd(), ".next", "cache", "fetch-cache"), { recursive: true, force: true });
-  const workDir = path.join(tmpdir(), `furniture-verify-${Date.now()}`);
+  const workDir = path.join(tmpdir(), `realestate-verify-${Date.now()}`);
   mkdirSync(workDir, { recursive: true });
 
   console.log("Starting in-memory MongoDB…");
   const mongo = await MongoMemoryServer.create();
-  const uri = mongo.getUri("furniture_verify");
+  const uri = mongo.getUri("realestate_verify");
   process.env.MONGODB_URI = uri;
 
   const { seed } = await import("./seed");
   await seed(() => {});
-  const { AdminUser } = await import("../src/lib/models");
+  const { AdminUser, Condo, Post } = await import("../src/lib/models");
   await AdminUser.create({ email: ADMIN_EMAIL, name: "Verifier", passwordHash: await bcrypt.hash(ADMIN_PASSWORD, 10) });
   check("seed + admin creation", true);
   // Idempotency: second seed must not duplicate or overwrite.
-  const { Category, Product } = await import("../src/lib/models");
-  await Category.updateOne({ slug: "bedroom" }, { $set: { description: "ADMIN EDIT" } });
+  await Condo.updateOne({ slug: "the-essex-etobicoke" }, { $set: { summary: "ADMIN EDIT" } });
   await seed(() => {});
-  const bedroom = await Category.findOne({ slug: "bedroom" }).lean();
-  check("seed is idempotent and keeps admin edits", bedroom?.description === "ADMIN EDIT" && (await Category.countDocuments()) === 3);
-  const productCount = await Product.countDocuments();
+  const essex = await Condo.findOne({ slug: "the-essex-etobicoke" }).lean();
+  check("seed is idempotent and keeps admin edits", essex?.summary === "ADMIN EDIT" && (await Condo.countDocuments()) === 2 && (await Post.countDocuments()) === 3);
+
+  // Calculator maths (pure functions)
+  const { landTransferTax, mortgagePayment } = await import("../src/lib/calculators");
+  const ltt = landTransferTax(800_000, { toronto: true, firstTimeBuyer: false, residential: true });
+  check("LTT: $800k Toronto = $12,475 + $12,475", ltt.ontario === 12_475 && ltt.toronto === 12_475 && ltt.total === 24_950, JSON.stringify(ltt));
+  const fthb = landTransferTax(500_000, { toronto: true, firstTimeBuyer: true, residential: true });
+  check("LTT: first-time buyer refunds capped at $4,000 / $4,475", fthb.ontarioRefund === 4_000 && fthb.torontoRebate === 4_475 && fthb.total === 6_475 * 2 - 8_475, JSON.stringify(fthb));
+  check("LTT: Toronto above $3M asks to contact", landTransferTax(3_500_000, { toronto: true, firstTimeBuyer: false, residential: true }).toronto === null);
+  check("LTT: 2.5% bracket above $2M (residential)", landTransferTax(2_500_000, { toronto: false, firstTimeBuyer: false, residential: true }).ontario === 36_475 + 12_500);
+  const m = mortgagePayment({ price: 625_000, downPayment: 125_000, ratePct: 5, years: 25, frequency: "monthly" });
+  check("Mortgage: $500k at 5% / 25y ≈ $2,908.02 monthly", Math.abs(m.payment - 2908.02) < 0.05 && m.insurance === 0, JSON.stringify(m));
+  const insured = mortgagePayment({ price: 500_000, downPayment: 25_000, ratePct: 5, years: 25, frequency: "monthly" });
+  check("Mortgage: 5% down adds 4% default insurance", insured.insurance === 19_000 && insured.principal === 494_000);
 
   const env = {
     ...process.env,
@@ -144,39 +155,54 @@ async function main() {
   console.log("Server ready.");
 
   // ---------- Public pages ----------
+  const SEARCH_URL = "https://www.a1housi.com/property_find_form_common";
   const home = await get("/");
   check("GET / 200", home.status === 200);
-  check("homepage hero headline", home.text.includes("Beautiful furniture.") && home.text.includes("Better living."));
-  check("homepage sections", ["Find your kind of comfort", "Thoughtful Design", "Designed to feel like home.", "Make space for better living."].every((s) => home.text.includes(s)));
+  check("homepage hero headline", home.text.includes("Find your place.") && home.text.includes("Move with confidence."));
+  check(
+    "homepage real estate sections",
+    ["Licensed Broker", "Real estate services for every move", "Featured condo buildings", "Personal service you can trust.", "Tools to plan your purchase", "Latest from the market", "What clients say", "Good to know"].every((s) => home.text.includes(s)),
+  );
+  check("homepage has no furniture content", !/furniture|sofa|collections\//i.test(home.text));
   check("homepage uses supplied logo + founder photo", home.text.includes("%2Fbrand%2Flogo.png") && home.text.includes("%2Fbrand%2Ffounder.jpg"));
-  check("homepage room cards link to collections", ["/collections/living-room", "/collections/bedroom", "/collections/dining-room"].every((s) => home.text.includes(s)));
+  check("Search Properties links to a1housi property search", home.text.includes(SEARCH_URL) && home.text.includes('target="_blank"'));
+  check("homepage shows real client testimonial", home.text.includes("Mark and Lorraine Brown"));
   check("social icons hidden when unset", !home.text.includes('aria-label="Instagram"'));
 
-  for (const p of ["/collections", "/collections?category=bedroom&sort=name-asc", "/collections?q=walnut", "/collections/living-room", "/products/arden-sofa", "/about", "/gallery", "/contact", "/sitemap.xml", "/robots.txt"]) {
+  for (const p of ["/about", "/featured-properties", "/condos", "/condos?city=Mississauga", "/condos/absolute-city-centre-mississauga", "/relocation", "/mortgage", "/land-transfer-tax", "/market-insights", "/market-insights?category=Seller%20Advice", "/market-insights/preparing-your-home-for-sale", "/testimonials", "/contact", "/sitemap.xml", "/robots.txt"]) {
     const r = await get(p);
     check(`GET ${p} 200`, r.status === 200, `status ${r.status}`);
   }
-  const filtered = await get("/collections?category=bedroom");
-  check("category filter only shows bedroom products", filtered.text.includes("Harbor Upholstered Bed") && !filtered.text.includes("Arden Sofa"));
-  const searched = await get("/collections?q=walnut");
-  check("search finds walnut pieces", searched.text.includes("Walnut Dining Table") && !searched.text.includes("Shell Dining Chair"));
-  const paged = await get("/collections?page=2");
-  check("pagination page 2", paged.status === 200 && paged.text.includes('aria-current="page"'));
-  const empty = await get("/collections?q=zzzznothing");
-  check("empty state", empty.text.includes("No pieces found"));
-  check("product page details", (await get("/products/arden-sofa")).text.includes("Inquire about this piece"));
-  check("unique metadata", (await get("/about")).text.includes("<title>About |"));
+  const featured = await get("/featured-properties");
+  check("featured properties links to Relocation.html and property search", featured.text.includes("https://propertylimit.com/Relocation.html") && featured.text.includes(SEARCH_URL));
+  const mississauga = await get("/condos?city=Mississauga");
+  check("condo city filter", mississauga.text.includes("Absolute City Centre") && !mississauga.text.includes("The Essex"));
+  const condoPage = await get("/condos/absolute-city-centre-mississauga");
+  check("condo page details + map + inquiry link", condoPage.text.includes("The Absolute Club") && condoPage.text.includes("maps.google.com") && condoPage.text.includes("condo=absolute-city-centre-mississauga"));
+  const sellerOnly = await get("/market-insights?category=Seller%20Advice");
+  check("insights topic filter", sellerOnly.text.includes("Preparing your home for sale") && !sellerOnly.text.includes("Closing costs every Ontario"));
+  const article = await get("/market-insights/preparing-your-home-for-sale");
+  check("article renders headings and bullets", article.text.includes("<h2") && article.text.includes("<li>Tidy the lawn"));
+  check("relocation content from propertylimit.com", (await get("/relocation")).text.includes("Services for newcomers to Canada"));
+  check("testimonials page lists all reviews", (await get("/testimonials")).text.includes("Roger Eddings"));
+  check("about page shows broker", (await get("/about")).text.includes("Nadeem Khan"));
+  check("unique metadata", (await get("/relocation")).text.includes("<title>Relocation Services |"));
   const sitemap = await get("/sitemap.xml");
-  check("sitemap lists products", sitemap.text.includes("/products/arden-sofa"));
+  check("sitemap lists condos and articles", sitemap.text.includes("/condos/the-essex-etobicoke") && sitemap.text.includes("/market-insights/closing-costs-for-ontario-home-buyers"));
   check("404 for unknown route", (await get("/no-such-page")).status === 404);
-  check("404 for unknown product", (await get("/products/does-not-exist")).status === 404);
-  check("404 for unknown collection", (await get("/collections/does-not-exist")).status === 404);
+  check("404 for unknown condo", (await get("/condos/does-not-exist")).status === 404);
+  check("404 for unknown article", (await get("/market-insights/does-not-exist")).status === 404);
+  check("old furniture routes are gone", (await get("/collections")).status === 404 && (await get("/products/arden-sofa")).status === 404);
+
+  // Scheduled article stays hidden until its date.
+  await Post.create({ title: "Future article", slug: "future-article", body: "Hidden for now.", publishedAt: new Date(Date.now() + 7 * 86_400_000), published: true });
+  check("scheduled article not public yet", (await get("/market-insights/future-article")).status === 404);
 
   // ---------- Unauthorized access ----------
   const adminNoCookie = await get("/admin");
   check("GET /admin without session redirects to login", adminNoCookie.status === 307 && (adminNoCookie.headers.get("location") ?? "").includes("/admin/login"));
-  const forged = await get("/admin/products", { headers: { cookie: "furn_admin_session=forged-token-value" } });
-  check("forged session cookie rejected server-side", forged.status !== 200 || !forged.text.includes("New product"), `status ${forged.status}`);
+  const forged = await get("/admin/condos", { headers: { cookie: "furn_admin_session=forged-token-value" } });
+  check("forged session cookie rejected server-side", forged.status !== 200 || !forged.text.includes("New condo page"), `status ${forged.status}`);
   const fd = new FormData();
   fd.append("file", new Blob([Buffer.from("x")], { type: "image/png" }), "a.png");
   fd.append("folder", "misc");
@@ -198,15 +224,61 @@ async function main() {
 
   // Screenshots for visual review
   await page.setViewport({ width: 1440, height: 900 });
-  for (const [name, p] of [["home-desktop", "/"], ["collections-desktop", "/collections"], ["product-desktop", "/products/arden-sofa"], ["about-desktop", "/about"], ["gallery-desktop", "/gallery"], ["contact-desktop", "/contact"]] as const) {
-    await page.goto(`${BASE}${p}`, { waitUntil: "networkidle0" });
+  for (const [name, p] of [
+    ["home-desktop", "/"],
+    ["about-desktop", "/about"],
+    ["featured-desktop", "/featured-properties"],
+    ["condos-desktop", "/condos"],
+    ["condo-desktop", "/condos/absolute-city-centre-mississauga"],
+    ["relocation-desktop", "/relocation"],
+    ["mortgage-desktop", "/mortgage"],
+    ["ltt-desktop", "/land-transfer-tax"],
+    ["insights-desktop", "/market-insights"],
+    ["article-desktop", "/market-insights/preparing-your-home-for-sale"],
+    ["testimonials-desktop", "/testimonials"],
+    ["contact-desktop", "/contact"],
+  ] as const) {
+    await page.goto(`${BASE}${p}`, { waitUntil: "networkidle2" });
+    await page.evaluate(async () => {
+      for (let y = 0; y < document.body.scrollHeight; y += 500) {
+        window.scrollTo(0, y);
+        await new Promise((r) => setTimeout(r, 250));
+      }
+      window.scrollTo(0, 0);
+    });
+    await new Promise((r) => setTimeout(r, 500));
     await page.screenshot({ path: shot(name), fullPage: true });
   }
+
+  // Desktop dropdown navigation
+  await page.goto(`${BASE}/about`, { waitUntil: "networkidle2" });
+  await page.click("xpath/.//nav[@aria-label='Main']//button[contains(., 'Services')]");
+  await page.waitForSelector("xpath/.//nav[@aria-label='Main']//a[@href='/relocation']", { visible: true });
+  await Promise.all([page.waitForFunction(() => location.pathname === "/relocation"), page.click("xpath/.//nav[@aria-label='Main']//a[@href='/relocation']")]);
+  check("desktop Services dropdown navigates", new URL(page.url()).pathname === "/relocation");
+
+  // Land transfer tax calculator updates live
+  await page.goto(`${BASE}/land-transfer-tax`, { waitUntil: "networkidle2" });
+  const priceInput = await page.$("#ltt-calc ~ div input, section[aria-labelledby='ltt-calc'] input[inputmode='numeric']");
+  await priceInput!.click({ count: 3 });
+  await page.keyboard.press("Backspace");
+  await priceInput!.type("400000");
+  await page.waitForFunction(() => document.querySelector("section[aria-labelledby='ltt-calc']")?.textContent?.includes("$4,475.00"));
+  check("LTT calculator shows $4,475 for $400,000", true);
+
+  // Mortgage calculator renders a payment
+  await page.goto(`${BASE}/mortgage`, { waitUntil: "networkidle2" });
+  const mortgageText = await page.$eval("section[aria-labelledby='mortgage-calc']", (el) => el.textContent ?? "");
+  check("mortgage calculator shows a monthly payment", /Monthlypayment\$[\d,]+\.\d{2}/.test(mortgageText.replace(/\s+/g, "")), mortgageText.slice(0, 200));
+
   await page.setViewport({ width: 390, height: 844, isMobile: true, hasTouch: true });
-  await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
+  for (const p of ["/", "/condos/absolute-city-centre-mississauga", "/land-transfer-tax", "/contact"]) {
+    await page.goto(`${BASE}${p}`, { waitUntil: "networkidle2" });
+    const ok = await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1);
+    check(`mobile: no horizontal scroll on ${p}`, ok);
+  }
+  await page.goto(`${BASE}/`, { waitUntil: "networkidle2" });
   await page.screenshot({ path: shot("home-mobile"), fullPage: true });
-  const noHScroll = await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1);
-  check("mobile: no horizontal scroll on homepage", noHScroll);
   await page.click('button[aria-label="Open menu"]');
   await page.waitForSelector("#mobile-nav", { visible: true });
   await new Promise((r) => setTimeout(r, 400));
@@ -217,43 +289,32 @@ async function main() {
   check("mobile menu opens and closes with Escape", drawerClosed);
   await page.click('button[aria-label="Open menu"]');
   await new Promise((r) => setTimeout(r, 300));
-  await Promise.all([page.waitForNavigation(), page.click('#mobile-nav a[href="/about"]')]);
+  await Promise.all([page.waitForFunction(() => location.pathname === "/condos"), page.click('#mobile-nav a[href="/condos"]')]);
+  await new Promise((r) => setTimeout(r, 300));
   const closedAfterNav = await page.evaluate(() => document.querySelector('button[aria-label="Open menu"]')?.getAttribute("aria-expanded") === "false");
-  check("mobile menu closes on navigation", page.url().endsWith("/about") && closedAfterNav);
+  check("mobile menu closes on navigation", page.url().endsWith("/condos") && closedAfterNav);
 
   await page.setViewport({ width: 1366, height: 900 });
 
-  // Gallery lightbox
-  await page.goto(`${BASE}/gallery`, { waitUntil: "networkidle0" });
-  await page.click('button[aria-label^="Open image"]');
-  await page.waitForSelector("#gallery-lightbox");
-  await page.keyboard.press("ArrowRight");
-  await page.keyboard.press("Escape");
-  await new Promise((r) => setTimeout(r, 200));
-  check("gallery lightbox opens and closes", (await page.$("#gallery-lightbox")) === null);
-
-  // Catalog controls (URL-backed)
-  await page.goto(`${BASE}/collections`, { waitUntil: "networkidle0" });
-  await page.select("#catalog-sort", "name-desc");
-  await page.waitForFunction(() => location.search.includes("sort=name-desc"));
-  check("sort select updates URL", page.url().includes("sort=name-desc"));
-
-  // Contact form with product preselected
-  await page.goto(`${BASE}/products/arden-sofa`, { waitUntil: "networkidle0" });
-  await Promise.all([page.waitForNavigation(), page.click('a[href="/contact?product=arden-sofa"]')]);
-  check("inquiry button preselects product", (await page.$eval("#product", (el) => (el as HTMLSelectElement).value)) === "arden-sofa");
-  await page.click('button[type="submit"]');
+  // Contact form with condo preselected
+  await page.goto(`${BASE}/condos/the-essex-etobicoke`, { waitUntil: "networkidle2" });
+  await Promise.all([page.waitForFunction(() => location.pathname === "/contact"), page.click("xpath/.//a[contains(., 'Inquire about this building')]")]);
+  await page.waitForSelector("#condo");
+  check("condo inquiry preselects building", (await page.$eval("#condo", (el) => (el as HTMLSelectElement).value)) === "the-essex-etobicoke");
+  check("condo inquiry preselects interest", (await page.$eval("#interest", (el) => (el as HTMLSelectElement).value)) === "Condominium inquiry");
+  await page.click('main button[type="submit"]');
   await page.waitForFunction(() => document.body.innerText.includes("Please correct the highlighted fields."));
   check("contact form server-side validation errors", true);
   await page.type("#name", "Test Visitor");
   await page.type("#email", "visitor@example.test");
-  await page.type("#message", "I would like to know more about available finishes.");
-  await page.click('button[type="submit"]');
+  await page.type("#reference", "Suite 1205");
+  await page.type("#message", "I would like to know about two-bedroom suites for sale.");
+  await page.click('main button[type="submit"]');
   await page.waitForFunction(() => document.body.innerText.includes("Message sent"));
   check("contact form submission succeeds", true);
 
   // Admin login
-  await page.goto(`${BASE}/admin/login`, { waitUntil: "networkidle0" });
+  await page.goto(`${BASE}/admin/login`, { waitUntil: "networkidle2" });
   await page.type("#email", ADMIN_EMAIL);
   await page.type("#password", "wrong-password");
   await page.click('button[type="submit"]');
@@ -272,11 +333,11 @@ async function main() {
   const session = cookies.find((c) => c.name === "furn_admin_session");
   check("session cookie is HTTP-only + SameSite=Lax", Boolean(session?.httpOnly) && session?.sameSite === "Lax");
   const dash = await page.evaluate(() => document.body.innerText);
-  check("dashboard shows real counts", dash.includes(String(productCount)) && dash.includes("New inquiries"));
+  check("dashboard shows counts", dash.includes("Condo pages") && dash.includes("Market Insights") && dash.includes("New inquiries"));
   await page.screenshot({ path: shot("admin-dashboard"), fullPage: true });
 
-  await page.goto(`${BASE}/admin/inquiries`, { waitUntil: "networkidle0" });
-  check("inquiry stored with product association", (await page.evaluate(() => document.body.innerText)).includes("Arden Sofa"));
+  await page.goto(`${BASE}/admin/inquiries`, { waitUntil: "networkidle2" });
+  check("inquiry stored with condo association", (await page.evaluate(() => document.body.innerText)).includes("Condominium inquiry: The Essex"));
 
   // ---------- Upload API ----------
   const smallPng = await sharp({ create: { width: 64, height: 64, channels: 3, background: "#29345f" } }).png().toBuffer();
@@ -288,7 +349,7 @@ async function main() {
   writeFileSync(pathA, smallPng);
   writeFileSync(pathB, big);
 
-  await page.goto(`${BASE}/admin`, { waitUntil: "networkidle0" });
+  await page.goto(`${BASE}/admin`, { waitUntil: "networkidle2" });
   const api = await page.evaluate(
     async (pngB64: string, bigB64: string) => {
       const dec = (b: string) => Uint8Array.from(atob(b), (c) => c.charCodeAt(0));
@@ -301,7 +362,7 @@ async function main() {
         return { status: r.status, body: await r.json().catch(() => null) };
       };
       const out: Record<string, unknown> = {};
-      out.valid = await post(new Blob([dec(pngB64)], { type: "image/png" }), {}, "products");
+      out.valid = await post(new Blob([dec(pngB64)], { type: "image/png" }), {}, "condos");
       out.badFolder = await post(new Blob([dec(pngB64)], { type: "image/png" }), {}, "secret");
       out.fakePng = await post(new Blob([new TextEncoder().encode("this is not an image at all")], { type: "image/png" }));
       out.textMime = await post(new Blob([dec(pngB64)], { type: "text/plain" }));
@@ -340,8 +401,8 @@ async function main() {
   );
   type R = { status: number; body: { url?: string; success?: boolean; size?: number; folder?: string; filename?: string; complete?: boolean } | null };
   const valid = api.valid as R;
-  check("valid upload → 201 with url", valid.status === 201 && /^\/api\/uploads\/products\/\d+-[a-f0-9]{16}\.png$/.test(valid.body?.url ?? ""), JSON.stringify(valid));
-  check("upload response shape", valid.body?.success === true && valid.body?.folder === "products" && typeof valid.body?.size === "number" && typeof valid.body?.filename === "string");
+  check("valid upload → 201 with url", valid.status === 201 && /^\/api\/uploads\/condos\/\d+-[a-f0-9]{16}\.png$/.test(valid.body?.url ?? ""), JSON.stringify(valid));
+  check("upload response shape", valid.body?.success === true && valid.body?.folder === "condos" && typeof valid.body?.size === "number" && typeof valid.body?.filename === "string");
   check("invalid folder rejected", (api.badFolder as R).status === 400);
   check("fake PNG (bad signature) rejected", (api.fakePng as R).status === 415);
   check("non-image MIME rejected", (api.textMime as R).status === 415);
@@ -378,7 +439,7 @@ async function main() {
   check("next/image can optimize /api/uploads images", optimized.status === 200 && (optimized.headers.get("content-type") ?? "").startsWith("image/"));
 
   // ---------- Content persistence + replacement/removal lifecycle (UI) ----------
-  await page.goto(`${BASE}/admin/pages?tab=home`, { waitUntil: "networkidle0" });
+  await page.goto(`${BASE}/admin/pages?tab=home`, { waitUntil: "networkidle2" });
   const fileInputs = async () => page.$$('input[type="file"]');
   const urlA = await waitForUpload(page, async () => (await fileInputs())[0].uploadFile(pathA));
   await page.$eval("textarea", (el) => {
@@ -406,37 +467,38 @@ async function main() {
   check("homepage falls back to placeholder when hero removed", homeHtml.includes("/placeholder.svg"));
 
   // Canceled edit: upload without saving leaves the saved content intact.
-  await page.goto(`${BASE}/admin/pages?tab=home`, { waitUntil: "networkidle0" });
+  await page.goto(`${BASE}/admin/pages?tab=home`, { waitUntil: "networkidle2" });
   const unsavedUrl = await waitForUpload(page, async () => (await fileInputs())[0].uploadFile(pathA));
-  await page.goto(`${BASE}/admin`, { waitUntil: "networkidle0" });
+  await page.goto(`${BASE}/admin`, { waitUntil: "networkidle2" });
   homeHtml = (await get("/")).text;
   check("canceled edit does not change saved content", !homeHtml.includes(encodeURIComponent(unsavedUrl)) && homeHtml.includes("Verified headline."));
 
-  // Product create via UI
-  await page.goto(`${BASE}/admin/products/new`, { waitUntil: "networkidle0" });
-  await page.type("#name", "Verify Test Chair");
-  await page.type("#description", "Created by the verification script.");
-  const productImg = await waitForUpload(page, async () => (await fileInputs())[0].uploadFile(pathA));
-  await Promise.all([page.waitForFunction(() => /\/admin\/products\/[a-f0-9]{24}$/.test(location.pathname)), page.click('main button[type="submit"]')]);
-  const prodPage = await get("/products/verify-test-chair");
-  check("product created in admin appears publicly", prodPage.status === 200 && prodPage.text.includes("Verify Test Chair") && prodPage.text.includes(encodeURIComponent(productImg)));
-  check("duplicate slug rejected", await (async () => {
-    await page.goto(`${BASE}/admin/products/new`, { waitUntil: "networkidle0" });
-    await page.type("#name", "Verify Test Chair");
+  // Condo page created via admin UI
+  await page.goto(`${BASE}/admin/condos/new`, { waitUntil: "networkidle2" });
+  await page.type("xpath/.//label[contains(., 'Building name')]/following-sibling::input", "Verify Towers");
+  await page.type("xpath/.//label[contains(., 'Short summary')]/following-sibling::textarea", "Created by the verification script.");
+  const condoImg = await waitForUpload(page, async () => (await fileInputs())[0].uploadFile(pathA));
+  await Promise.all([page.waitForFunction(() => /\/admin\/condos\/[a-f0-9]{24}$/.test(location.pathname)), page.click('main button[type="submit"]')]);
+  const condoPublic = await get("/condos/verify-towers");
+  check("condo page created in admin appears publicly", condoPublic.status === 200 && condoPublic.text.includes("Verify Towers") && condoPublic.text.includes(encodeURIComponent(condoImg)));
+  check("duplicate condo slug rejected", await (async () => {
+    await page.goto(`${BASE}/admin/condos/new`, { waitUntil: "networkidle2" });
+    await page.type("xpath/.//label[contains(., 'Building name')]/following-sibling::input", "Verify Towers");
     await waitForAction(page, () => page.click('main button[type="submit"]'));
     return (await page.evaluate(() => document.body.innerText)).includes("slug is already in use");
   })());
 
-  // Category deletion protection
-  await page.goto(`${BASE}/admin/categories`, { waitUntil: "networkidle0" });
-  await page.click('button[aria-label="Delete Living Room"]');
-  await page.waitForSelector("dialog[open]");
-  const dialogText = await page.$eval("dialog[open]", (d) => d.textContent ?? "");
-  check("category delete requires reassignment when products exist", dialogText.includes("Choose where to move them"));
-  await page.click("dialog[open] .admin-btn-ghost");
+  // Market Insights article created via admin UI
+  await page.goto(`${BASE}/admin/insights/new`, { waitUntil: "networkidle2" });
+  await page.type("xpath/.//label[contains(., 'Title')]/following-sibling::input", "Verify Market Update");
+  await page.type("xpath/.//label[contains(., 'Article text')]/following-sibling::textarea", "## Summary\n\nThe market is changing.\n\n- Point one\n- Point two");
+  await Promise.all([page.waitForFunction(() => /\/admin\/insights\/[a-f0-9]{24}$/.test(location.pathname)), page.click('main button[type="submit"]')]);
+  const postPublic = await get("/market-insights/verify-market-update");
+  check("article created in admin appears publicly", postPublic.status === 200 && postPublic.text.includes("Verify Market Update") && postPublic.text.includes("<li>Point one</li>"));
+  check("new article listed on homepage", (await get("/")).text.includes("Verify Market Update"));
 
   // Settings: social link appears in footer
-  await page.goto(`${BASE}/admin/settings`, { waitUntil: "networkidle0" });
+  await page.goto(`${BASE}/admin/settings`, { waitUntil: "networkidle2" });
   const [igInput] = await page.$$("xpath/.//label[contains(., 'Instagram URL')]/following-sibling::input");
   await igInput.type("https://instagram.com/example");
   await waitForAction(page, () => page.click('main button[type="submit"]'));

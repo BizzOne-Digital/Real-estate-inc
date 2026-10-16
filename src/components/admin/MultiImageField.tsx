@@ -38,7 +38,7 @@ export function MultiImageField({
     if (!files || files.length === 0) return;
     const room = max - latest.current.length;
     const list = Array.from(files).slice(0, Math.max(0, room));
-    if (list.length < files.length) toast("error", `A product can have up to ${max} images.`);
+    if (list.length < files.length) toast("error", `You can add up to ${max} images.`);
     setBusy(true);
     try {
       for (let i = 0; i < list.length; i++) {

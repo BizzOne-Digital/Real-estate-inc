@@ -1,203 +1,124 @@
 /**
- * SAMPLE CATALOG DATA — for demonstration only.
- * Product names, descriptions, materials and dimensions below are illustrative placeholders,
- * not claims about real inventory. Replace them in the admin panel with actual products.
- * Prices are intentionally omitted. Photos are generated and bundled locally in public/images.
+ * Starter content for the real estate site.
+ * Condo pages are adapted from Nadeem Khan's existing building pages on propertylimit.com.
+ * Articles are general guidance (no market statistics) and can be edited or replaced in the admin panel.
+ * Photos are bundled stock images (public/images/re). Condo photos are generic placeholders, not the actual buildings.
  */
+import { SITE_IMAGES } from "../src/lib/content-types";
 
-
-export const SAMPLE_CATEGORIES = [
+export const SAMPLE_CONDOS = [
   {
-    slug: "living-room",
-    name: "Living Room",
-    description: "Sofas, lounge chairs and tables for the room where everyday life happens.",
-    image: "/images/living-room.webp",
+    slug: "absolute-city-centre-mississauga",
+    name: "Absolute City Centre",
+    address: "70, 80 & 90 Absolute Avenue, Mississauga, ON L4Z 0A3",
+    city: "Mississauga",
+    neighbourhood: "City Centre (Square One)",
+    intersection: "Burnhamthorpe Road & Hurontario Street",
+    developer: "",
+    summary:
+      "A lifestyle community at the heart of Mississauga's City Centre, close to Square One, with a three-storey recreation club, 24-hour gatehouse and landscaped grounds.",
+    description:
+      "Absolute City Centre is a large-scale condominium community right at the four corners of Burnhamthorpe and Hurontario in Mississauga's City Centre. Each tower is joined to a central recreation facility, the Absolute Club, by pathways and landscaped grounds with an outdoor trail.\n\nResidents are steps from Square One Shopping Centre, Celebration Square, transit and the restaurants and services of the downtown core, with quick access to Highways 403, 401 and the QEW.\n\n## Thinking of buying, selling or renting here?\n\nContact Nadeem for current availability, recent sales in the building and a personal tour.",
+    details: [
+      { label: "Property type", value: "Condominium apartment" },
+      { label: "Parking", value: "Underground, with secured visitor parking" },
+    ],
+    featureGroups: [
+      {
+        heading: "The Absolute Club",
+        items: [
+          "Heated indoor pool with whirlpool",
+          "Seasonal outdoor pool and sun deck with BBQs",
+          "Gym for volleyball, half-court basketball and badminton",
+          "Indoor running and walking track",
+          "Fitness centre, strength training area and studio for yoga and pilates",
+          "Squash courts, billiards room and card room",
+          "Theatre room, party rooms and guest suites",
+        ],
+      },
+      {
+        heading: "Security & convenience",
+        items: [
+          "24-hour manned gatehouse",
+          "Card access throughout common areas",
+          "Camera-monitored entrances and parking",
+          "Car wash bay in the underground garage",
+          "Professionally landscaped grounds with walkways and fountains",
+        ],
+      },
+    ],
+    images: [SITE_IMAGES.condoTowers1, SITE_IMAGES.condoTowers2],
+    mapQuery: "70 Absolute Ave, Mississauga, ON",
+    featured: true,
     order: 1,
   },
   {
-    slug: "bedroom",
-    name: "Bedroom",
-    description: "Calm, restful pieces for the most personal room in your home.",
-    image: "/images/bedroom.webp",
+    slug: "the-essex-etobicoke",
+    name: "The Essex",
+    address: "5229 & 5233 Dundas Street West, Etobicoke, ON",
+    city: "Toronto",
+    neighbourhood: "Etobicoke City Centre",
+    intersection: "Dundas Street West & Kipling Avenue",
+    developer: "Tridel",
+    summary:
+      "A 21-storey Tridel residence set in parkland near Kipling Station, with a 24-hour concierge, indoor pool and easy access to downtown Toronto and Pearson Airport.",
+    description:
+      "Located on the south side of Dundas Street West, just west of Kipling Avenue, The Essex sits within a well-established Etobicoke neighbourhood surrounded by gardens, courtyards and walkways. Kipling subway and GO station are a short walk away, putting downtown Toronto about 20 minutes away by transit.\n\nResidents enjoy nearby shopping along Bloor Street and in Bloor West Village, Cloverdale Mall, and the ravine trails of the Humber River and Etobicoke and Mimico Creeks. Highways 401, 427 and the QEW are minutes away, and Pearson International Airport is about a ten-minute drive.\n\n## Thinking of buying, selling or renting here?\n\nContact Nadeem for current availability, recent sales in the building and a personal tour.",
+    details: [
+      { label: "Property type", value: "Condominium apartment" },
+      { label: "Suites", value: "One, two and two-plus-den bedroom layouts" },
+      { label: "Maintenance fees include", value: "Heat, water, building insurance, central air, parking, common elements" },
+      { label: "Heating", value: "Gas, forced air with central air conditioning" },
+      { label: "Laundry", value: "Ensuite" },
+      { label: "Parking", value: "Underground" },
+    ],
+    featureGroups: [
+      {
+        heading: "Amenities",
+        items: [
+          "24-hour concierge",
+          "Indoor swimming pool",
+          "Exercise room",
+          "Theatre",
+          "Virtual golf and sports lounge",
+          "Two party rooms with kitchens",
+          "Barbecue area",
+        ],
+      },
+    ],
+    images: [SITE_IMAGES.condoMidrise1, SITE_IMAGES.condoMidrise2],
+    mapQuery: "5233 Dundas St W, Etobicoke, ON",
+    featured: true,
     order: 2,
   },
-  {
-    slug: "dining-room",
-    name: "Dining Room",
-    description: "Tables and seating made for long dinners and everyday gatherings.",
-    image: "/images/dining-room.webp",
-    order: 3,
-  },
 ];
 
-type SampleProduct = {
-  slug: string;
-  name: string;
-  category: string;
-  description: string;
-  materials: string[];
-  dimensions: string;
-  finishes: string[];
-  images: string[];
-  featured?: boolean;
-};
-
-export const SAMPLE_PRODUCTS: SampleProduct[] = [
+export const SAMPLE_POSTS = [
   {
-    slug: "arden-sofa",
-    name: "Arden Sofa",
-    category: "living-room",
-    description:
-      "A clean-lined three-seat sofa with tapered legs and generous, supportive cushions.\n\nSample listing — update details in the admin panel.",
-    materials: ["Velvet upholstery", "Hardwood frame", "Solid wood legs"],
-    dimensions: "W 84 in × D 36 in × H 33 in",
-    finishes: ["Forest green", "Ivory", "Slate"],
-    images: ["/images/arden-sofa.webp", "/images/arden-sofa-detail.webp"],
-    featured: true,
+    slug: "preparing-your-home-for-sale",
+    title: "Preparing your home for sale: a practical checklist",
+    category: "Seller Advice" as const,
+    excerpt: "Small, inexpensive improvements can help your home make a great first impression and sell with confidence.",
+    coverImage: SITE_IMAGES.articlePrepareHome,
+    body:
+      "First impressions matter. Buyers often decide how they feel about a home within minutes of walking through the door, and many first see it online. A little preparation goes a long way.\n\n## Outside\n\n- Tidy the lawn, garden beds and walkways\n- Clean windows, the front door and light fixtures\n- Make sure the house number is easy to read\n- Clear snow and ice promptly in winter\n\n## Inside\n\n- Declutter every room and clear kitchen and bathroom counters\n- Repair small things: dripping taps, loose handles, burnt-out bulbs\n- Consider fresh, neutral paint where walls are marked or very bold\n- Let in as much natural light as possible\n\n## Pricing and timing\n\nThe right price depends on recent comparable sales, current competition and market conditions in your area. **A market evaluation** before you list helps you set expectations and avoid sitting on the market too long.\n\nThinking of selling? Contact Nadeem for a free market evaluation of your home.",
   },
   {
-    slug: "linden-lounge-chair",
-    name: "Linden Lounge Chair",
-    category: "living-room",
-    description: "A compact lounge chair with a softly sculpted back, sized for reading corners and smaller rooms.\n\nSample listing.",
-    materials: ["Woven fabric", "Oak legs"],
-    dimensions: "W 28 in × D 30 in × H 32 in",
-    finishes: ["Mustard", "Oatmeal"],
-    images: ["/images/linden-lounge-chair.webp"],
+    slug: "closing-costs-for-ontario-home-buyers",
+    title: "Closing costs every Ontario home buyer should budget for",
+    category: "Buyer Advice" as const,
+    excerpt: "Your down payment is only part of the picture. Here are the closing costs to plan for before you buy.",
+    coverImage: SITE_IMAGES.articleClosingCosts,
+    body:
+      "When you budget for a home, plan for more than the purchase price and down payment. Closing costs are paid on or before closing day and can add up quickly.\n\n## Common closing costs\n\n- **Land transfer tax:** Ontario land transfer tax applies to every purchase, and properties in the City of Toronto also pay a municipal land transfer tax. First-time buyers may qualify for refunds.\n- **Legal fees and disbursements:** your real estate lawyer handles title searches, registration and the closing itself.\n- **Title insurance:** protects against certain title problems and is often arranged by your lawyer.\n- **Home inspection:** strongly recommended before you firm up an offer.\n- **Mortgage default insurance:** usually required if your down payment is below 20%. It is typically added to the mortgage, but provincial sales tax on the premium is paid at closing.\n- **Adjustments:** you may reimburse the seller for property taxes or utilities they have prepaid.\n- **Moving and setup:** movers, utility connections and any immediate repairs.\n\n## Plan ahead\n\nUse the land transfer tax calculator and mortgage calculator on this site for an estimate, then confirm the details with your lawyer and lender.\n\nQuestions about budgeting for your purchase? Contact Nadeem.",
   },
   {
-    slug: "cove-tufted-chair",
-    name: "Cove Tufted Chair",
-    category: "living-room",
-    description: "Button-tufted accent chair with turned legs and a gently curved back.\n\nSample listing.",
-    materials: ["Linen blend", "Painted hardwood"],
-    dimensions: "W 26 in × D 28 in × H 34 in",
-    finishes: ["Cream", "Stone grey"],
-    images: ["/images/cove-tufted-chair.webp"],
-    featured: true,
+    slug: "why-work-with-a-real-estate-professional",
+    title: "Why work with a real estate professional?",
+    category: "Market Commentary" as const,
+    excerpt: "With so much information online, why hire an agent? Here is what a professional brings to your purchase or sale.",
+    coverImage: SITE_IMAGES.articleWhyAgent,
+    body:
+      "With listings available online, some buyers and sellers wonder whether they need an agent at all. Here is what a real estate professional brings to the table.\n\n## Education and experience\n\nYou do not need to know everything about buying and selling real estate when you work with someone who does.\n\n## Neighbourhood knowledge\n\nAgents know the area, can identify comparable sales and can point you to information on schools, transit and amenities.\n\n## Price guidance\n\nAn agent helps you weigh the data so you can make the right choice on price, then builds a negotiation strategy around market supply, demand and conditions.\n\n## Market conditions\n\nAverage prices, days on market and list-to-sale ratios all influence how you should approach a purchase or sale.\n\n## Negotiation and confidentiality\n\nAgents can take the emotion out of negotiations and keep your information confidential from the other side.\n\n## Paperwork and follow-through\n\nToday's agreements are detailed, and small mistakes can be costly. A good agent manages the details, and is still there to answer questions after closing.\n\nReady to talk about your plans? Contact Nadeem.",
   },
-  {
-    slug: "haven-slipper-chair",
-    name: "Haven Slipper Chair",
-    category: "living-room",
-    description: "An armless slipper chair with a deep seat — easy to place beside a sofa or at the end of a bed.\n\nSample listing.",
-    materials: ["Velvet upholstery", "Hardwood frame"],
-    dimensions: "W 27 in × D 30 in × H 33 in",
-    finishes: ["Ochre", "Sand"],
-    images: ["/images/haven-slipper-chair.webp"],
-  },
-  {
-    slug: "walnut-side-table",
-    name: "Walnut Side Table",
-    category: "living-room",
-    description: "A cantilevered side table with an open shelf for books and magazines.\n\nSample listing.",
-    materials: ["Walnut veneer", "Solid walnut"],
-    dimensions: "W 18 in × D 14 in × H 22 in",
-    finishes: ["Natural walnut"],
-    images: ["/images/walnut-side-table.webp"],
-  },
-  {
-    slug: "oslo-sideboard",
-    name: "Oslo Sideboard",
-    category: "living-room",
-    description: "A low sideboard with cane-front doors and adjustable interior shelving.\n\nSample listing.",
-    materials: ["Oak veneer", "Natural cane"],
-    dimensions: "W 63 in × D 18 in × H 30 in",
-    finishes: ["Natural oak", "Smoked oak"],
-    images: ["/images/oslo-sideboard.webp"],
-  },
-  {
-    slug: "harbor-upholstered-bed",
-    name: "Harbor Upholstered Bed",
-    category: "bedroom",
-    description: "A channel-tufted upholstered bed with a padded headboard for comfortable reading.\n\nSample listing.",
-    materials: ["Performance fabric", "Engineered wood frame"],
-    dimensions: "Queen: W 66 in × L 88 in × H 52 in",
-    finishes: ["Ivory", "Mist grey"],
-    images: ["/images/harbor-upholstered-bed.webp"],
-    featured: true,
-  },
-  {
-    slug: "linen-platform-bed",
-    name: "Linen Platform Bed",
-    category: "bedroom",
-    description: "A low platform bed in solid wood, designed to be dressed simply in natural linens.\n\nSample listing.",
-    materials: ["Solid pine", "Natural oil finish"],
-    dimensions: "Queen: W 64 in × L 86 in × H 14 in",
-    finishes: ["Natural", "Honey"],
-    images: ["/images/bedroom.webp"],
-  },
-  {
-    slug: "nordic-nightstand",
-    name: "Nordic Nightstand",
-    category: "bedroom",
-    description: "A compact nightstand with one drawer and an open shelf.\n\nSample listing.",
-    materials: ["Lacquered MDF", "Solid ash legs"],
-    dimensions: "W 18 in × D 16 in × H 22 in",
-    finishes: ["White", "Ash"],
-    images: ["/images/nordic-nightstand.webp"],
-  },
-  {
-    slug: "tufted-bed-bench",
-    name: "Tufted Bed Bench",
-    category: "bedroom",
-    description: "An upholstered bench for the foot of the bed with a button-tufted seat.\n\nSample listing.",
-    materials: ["Linen blend", "Painted hardwood legs"],
-    dimensions: "W 52 in × D 18 in × H 19 in",
-    finishes: ["Ivory", "Taupe"],
-    images: ["/images/tufted-bed-bench.webp"],
-  },
-  {
-    slug: "walnut-dining-table",
-    name: "Walnut Dining Table",
-    category: "dining-room",
-    description: "A generous rectangular dining table with a warm walnut finish that seats six comfortably.\n\nSample listing.",
-    materials: ["Walnut veneer", "Solid hardwood base"],
-    dimensions: "W 84 in × D 40 in × H 30 in",
-    finishes: ["Natural walnut", "Dark walnut"],
-    images: ["/images/dining-room.webp", "/images/walnut-dining-table-detail.webp"],
-    featured: true,
-  },
-  {
-    slug: "shell-dining-chair",
-    name: "Shell Dining Chair",
-    category: "dining-room",
-    description: "A moulded shell chair with a cushioned seat pad and slim wooden legs.\n\nSample listing.",
-    materials: ["Moulded polypropylene", "Beech legs"],
-    dimensions: "W 19 in × D 21 in × H 32 in",
-    finishes: ["Black", "White"],
-    images: ["/images/shell-dining-chair.webp"],
-  },
-  {
-    slug: "heritage-dining-chair",
-    name: "Heritage Dining Chair",
-    category: "dining-room",
-    description: "A classic wooden dining chair with a gently angled back.\n\nSample listing.",
-    materials: ["Solid hardwood"],
-    dimensions: "W 18 in × D 20 in × H 33 in",
-    finishes: ["Chestnut", "Natural"],
-    images: ["/images/heritage-dining-chair.webp"],
-  },
-  {
-    slug: "counter-stool",
-    name: "Counter Stool",
-    category: "dining-room",
-    description: "A simple counter-height stool with a footrest stretcher.\n\nSample listing.",
-    materials: ["Solid birch"],
-    dimensions: "W 15 in × D 15 in × H 26 in",
-    finishes: ["White wash", "Natural birch"],
-    images: ["/images/counter-stool.webp"],
-  },
-];
-
-export const SAMPLE_GALLERY: { image: string; caption: string; alt: string; category: string | null }[] = [
-  { image: "/images/hero-living-room.webp", caption: "Soft neutrals", alt: "Living room with cream sofa and woven accents", category: "living-room" },
-  { image: "/images/living-room.webp", caption: "Afternoon light", alt: "Sunlit living room with wooden coffee tables", category: "living-room" },
-  { image: "/images/bedroom.webp", caption: "Simple rest", alt: "Low wooden platform bed with white linens", category: "bedroom" },
-  { image: "/images/dining-room.webp", caption: "Garden dining", alt: "Walnut dining table beside garden doors", category: "dining-room" },
-  { image: "/images/warm-textures.webp", caption: "Warm textures", alt: "Living room with tan sectional and plants", category: "living-room" },
-  { image: "/images/layered-bedroom.webp", caption: "Layered bedroom", alt: "Bedroom with layered bedding and pendant light", category: "bedroom" },
-  { image: "/images/walnut-dining-table-detail.webp", caption: "Gathering place", alt: "Dining room with green upholstered chairs", category: "dining-room" },
-  { image: "/images/gallery-wall.webp", caption: "Gallery wall", alt: "Living room with a gallery wall and leather sofa", category: "living-room" },
-  { image: "/images/colour-accents.webp", caption: "Colour accents", alt: "Bedroom with orange bench and colourful pillows", category: "bedroom" },
 ];

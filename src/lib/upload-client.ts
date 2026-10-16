@@ -6,7 +6,7 @@ export const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/g
 const DIRECT_UPLOAD_LIMIT = 3.5 * 1024 * 1024;
 const CHUNK_SIZE = 1024 * 1024;
 
-export type UploadFolder = "products" | "gallery" | "pages" | "misc";
+export type UploadFolder = "condos" | "posts" | "pages" | "misc";
 
 export interface UploadResult {
   success: true;

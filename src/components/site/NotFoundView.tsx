@@ -17,10 +17,10 @@ export function NotFoundView() {
             Back to home <ThinArrow className="btn-arrow" />
           </Link>
           <Link
-            href="/collections"
+            href="/contact"
             className="inline-flex items-center justify-center border border-navy px-6 py-3 text-navy transition-colors hover:bg-navy hover:text-white"
           >
-            Browse collections
+            Contact Nadeem
           </Link>
         </div>
       </div>

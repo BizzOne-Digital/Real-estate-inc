@@ -1,6 +1,6 @@
 import { Schema, model, models, type Model } from "mongoose";
 
-export const UPLOAD_FOLDERS = ["products", "gallery", "pages", "misc"] as const;
+export const UPLOAD_FOLDERS = ["condos", "posts", "pages", "misc", "products", "gallery"] as const;
 export type UploadFolder = (typeof UPLOAD_FOLDERS)[number];
 
 export interface StoredUploadDoc {

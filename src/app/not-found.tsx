@@ -17,7 +17,7 @@ export default async function RootNotFound() {
   }
   return (
     <>
-      <Header logo={settings.logo} logoAlt={settings.logoAlt} />
+      <Header logo={settings.logo} logoAlt={settings.logoAlt} searchUrl={settings.propertySearchUrl} />
       <main id="main">
         <NotFoundView />
       </main>

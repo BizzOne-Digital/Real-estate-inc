@@ -16,13 +16,19 @@ export function slugify(s: string): string {
     .slice(0, 90);
 }
 
-export function formatPrice(price: number | null | undefined, currency = "CAD"): string | null {
-  if (price === null || price === undefined || Number.isNaN(price)) return null;
-  try {
-    return new Intl.NumberFormat("en-CA", { style: "currency", currency, maximumFractionDigits: 0 }).format(price);
-  } catch {
-    return price.toLocaleString("en-CA");
-  }
+export function formatCurrency(amount: number, decimals = 0): string {
+  return new Intl.NumberFormat("en-CA", {
+    style: "currency",
+    currency: "CAD",
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  }).format(amount);
+}
+
+export function formatDate(value: string | Date): string {
+  const d = typeof value === "string" ? new Date(value) : value;
+  if (Number.isNaN(d.getTime())) return "";
+  return d.toLocaleDateString("en-CA", { year: "numeric", month: "long", day: "numeric", timeZone: "America/Toronto" });
 }
 
 export function siteUrl(): string {

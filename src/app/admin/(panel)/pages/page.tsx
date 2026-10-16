@@ -1,39 +1,54 @@
 import Link from "next/link";
 import { AdminPageTitle } from "@/components/admin/AdminShell";
-import { AboutContentForm, CollectionsContentForm, ContactContentForm, GalleryContentForm, HomeContentForm } from "@/components/admin/PageContentForms";
 import {
-  DEFAULT_ABOUT,
-  DEFAULT_COLLECTIONS,
-  DEFAULT_CONTACT,
-  DEFAULT_GALLERY,
-  DEFAULT_HOME,
+  AboutContentForm,
+  ContactContentForm,
+  HomeContentForm,
+  InfoPageForm,
+  TestimonialsForm,
+} from "@/components/admin/PageContentForms";
+import {
   withDefaults,
   type AboutContent,
-  type CollectionsContent,
   type ContactContent,
-  type GalleryContent,
   type HomeContent,
+  type InfoPageContent,
+  type TestimonialsContent,
 } from "@/lib/content-types";
+import { PAGE_DEFAULTS } from "@/lib/data";
 import { connectDB, plain } from "@/lib/db";
-import { PageContent } from "@/lib/models";
+import { PageContent, type PageKey } from "@/lib/models";
 import { cn } from "@/lib/utils";
 
 export const metadata = { title: "Page content" };
 
-const TABS = [
+const TABS: { key: PageKey; label: string; note?: string }[] = [
   { key: "home", label: "Homepage" },
-  { key: "collections", label: "Collections & Products" },
-  { key: "gallery", label: "Gallery" },
   { key: "about", label: "About" },
+  {
+    key: "featured",
+    label: "Featured Properties",
+    note: "The Search Properties and featured listings links on this page are set in Settings.",
+  },
+  { key: "relocation", label: "Relocation" },
+  { key: "mortgage", label: "Mortgage", note: "The mortgage calculator is shown automatically between the header and the sections." },
+  {
+    key: "land-transfer-tax",
+    label: "Land Transfer Tax",
+    note: "The land transfer tax calculator is shown automatically between the header and the sections.",
+  },
+  { key: "testimonials", label: "Testimonials" },
   { key: "contact", label: "Contact" },
-] as const;
+];
 
 export default async function AdminPagesPage({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
   const { tab: rawTab } = await searchParams;
-  const tab = TABS.some((t) => t.key === rawTab) ? (rawTab as (typeof TABS)[number]["key"]) : "home";
+  const active = TABS.find((t) => t.key === rawTab) ?? TABS[0];
+  const tab = active.key;
   await connectDB();
   const doc = await PageContent.findOne({ key: tab }).lean();
   const stored = plain<Record<string, unknown> | null>(doc?.data ?? null);
+  const initial = withDefaults(PAGE_DEFAULTS[tab] as object, stored);
 
   return (
     <>
@@ -55,11 +70,13 @@ export default async function AdminPagesPage({ searchParams }: { searchParams: P
         ))}
       </div>
       <div className="max-w-4xl" role="tabpanel">
-        {tab === "home" && <HomeContentForm key="home" initial={withDefaults<HomeContent>(DEFAULT_HOME, stored)} />}
-        {tab === "about" && <AboutContentForm key="about" initial={withDefaults<AboutContent>(DEFAULT_ABOUT, stored)} />}
-        {tab === "collections" && <CollectionsContentForm key="collections" initial={withDefaults<CollectionsContent>(DEFAULT_COLLECTIONS, stored)} />}
-        {tab === "gallery" && <GalleryContentForm key="gallery" initial={withDefaults<GalleryContent>(DEFAULT_GALLERY, stored)} />}
-        {tab === "contact" && <ContactContentForm key="contact" initial={withDefaults<ContactContent>(DEFAULT_CONTACT, stored)} />}
+        {tab === "home" && <HomeContentForm key="home" initial={initial as HomeContent} />}
+        {tab === "about" && <AboutContentForm key="about" initial={initial as AboutContent} />}
+        {(tab === "featured" || tab === "relocation" || tab === "mortgage" || tab === "land-transfer-tax") && (
+          <InfoPageForm key={tab} pageKey={tab} initial={initial as InfoPageContent} note={active.note} />
+        )}
+        {tab === "testimonials" && <TestimonialsForm key="testimonials" initial={initial as TestimonialsContent} />}
+        {tab === "contact" && <ContactContentForm key="contact" initial={initial as ContactContent} />}
       </div>
     </>
   );
