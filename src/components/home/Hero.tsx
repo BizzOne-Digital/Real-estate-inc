@@ -13,8 +13,8 @@ export function Hero({ content, searchUrl }: { content: HomeContent; searchUrl: 
   const lines = content.heroHeadline.split("\n").filter(Boolean);
   return (
     <div className="bg-mist">
-      <section aria-labelledby="hero-heading" className="container-site grid gap-6 py-6 lg:grid-cols-[0.95fr_1.05fr] lg:gap-10 lg:py-8">
-        <div className="flex flex-col justify-center py-3 lg:py-6">
+      <section aria-labelledby="hero-heading" className="container-site grid gap-6 py-6 lg:grid-cols-[0.95fr_1.05fr] lg:gap-10 lg:py-5">
+        <div className="flex flex-col justify-center py-3 lg:py-2">
           <h1
             id="hero-heading"
             className="animate-rise font-display text-[clamp(2.3rem,3.1vw,3.4rem)] font-medium leading-[0.98] tracking-[-0.025em] text-navy"
@@ -37,7 +37,7 @@ export function Hero({ content, searchUrl }: { content: HomeContent; searchUrl: 
             </Link>
           )}
         </div>
-        <div className="relative h-[220px] overflow-hidden sm:h-[280px] lg:h-[clamp(280px,26vw,360px)] lg:self-center">
+        <div className="relative h-[220px] overflow-hidden sm:h-[280px] lg:h-[clamp(240px,20vw,320px)] lg:self-center">
           <SafeImage
             src={content.heroImage}
             alt={content.heroImageAlt}
