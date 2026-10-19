@@ -13,8 +13,8 @@ export function Hero({ content, searchUrl }: { content: HomeContent; searchUrl: 
   const lines = content.heroHeadline.split("\n").filter(Boolean);
   return (
     <div className="bg-mist">
-      <section aria-labelledby="hero-heading" className="container-site grid gap-6 py-6 lg:grid-cols-[0.95fr_1.05fr] lg:gap-10 lg:py-5">
-        <div className="flex flex-col justify-center py-3 lg:py-2">
+      <section aria-labelledby="hero-heading" className="grid lg:grid-cols-[42%_58%] xl:min-h-[clamp(400px,31vw,470px)] xl:grid-cols-[32%_68%]">
+        <div className="flex flex-col justify-center px-6 py-10 sm:px-10 lg:py-12 xl:justify-start xl:px-[clamp(2.5rem,4.5vw,4.5rem)] xl:pb-14 xl:pt-[110px]">
           <h1
             id="hero-heading"
             className="animate-rise font-display text-[clamp(2.3rem,3.1vw,3.4rem)] font-medium leading-[0.98] tracking-[-0.025em] text-navy"
@@ -37,19 +37,19 @@ export function Hero({ content, searchUrl }: { content: HomeContent; searchUrl: 
             </Link>
           )}
         </div>
-        <div className="relative h-[220px] overflow-hidden sm:h-[280px] lg:h-[clamp(240px,20vw,320px)] lg:self-center">
+        <div className="relative aspect-[16/9] overflow-hidden lg:aspect-auto">
           <SafeImage
             src={content.heroImage}
             alt={content.heroImageAlt}
             fill
             priority
-            sizes="(min-width: 1320px) 630px, (min-width: 1024px) 50vw, 100vw"
+            sizes="(min-width: 1280px) 68vw, (min-width: 1024px) 58vw, 100vw"
             className="animate-fade object-cover object-[50%_60%]"
           />
         </div>
       </section>
 
-      <div className="container-site relative">
+      <div className="container-site relative xl:-mt-10">
         <PropertySearch searchUrl={searchUrl} heading={content.searchHeading} text={content.searchText} />
       </div>
 

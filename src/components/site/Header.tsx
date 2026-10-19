@@ -119,6 +119,8 @@ function Dropdown({ label, items, pathname }: { label: string; items: NavLink[];
 
 export function Header({ logo, logoAlt, searchUrl }: { logo: string; logoAlt: string; searchUrl: string }) {
   const pathname = usePathname();
+  // On the homepage the desktop header floats over the split hero, as in the reference design.
+  const overlay = pathname === "/";
   const nav = buildNav(searchUrl);
   const [open, setOpen] = useState(false);
   // Close the drawer whenever navigation happens.
@@ -178,7 +180,7 @@ export function Header({ logo, logoAlt, searchUrl }: { logo: string; logoAlt: st
   );
 
   return (
-    <header className="relative z-30 w-full bg-mist">
+    <header className={cn("z-30 w-full", overlay ? "xl:absolute xl:inset-x-0 xl:top-0" : "relative bg-mist")}>
       {/* Desktop */}
       <div className="hidden xl:flex xl:items-start">
         <div className="flex h-[92px] w-[32%] shrink-0 items-center justify-center bg-white">
