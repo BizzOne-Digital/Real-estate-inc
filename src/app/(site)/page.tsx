@@ -7,7 +7,6 @@ import {
   FeaturedCondos,
   LatestInsights,
   ProcessSteps,
-  ServicesSection,
   TestimonialsTeaser,
   ToolsSection,
   VisitStrip,
@@ -35,7 +34,6 @@ export default async function HomePage() {
     <>
       <Hero content={home} searchUrl={settings.propertySearchUrl} />
       <Benefits items={home.benefits} />
-      <ServicesSection content={home} />
       <FeaturedCondos content={home} condos={condos} />
       <FounderSection content={home} />
       <ProcessSteps content={home} />

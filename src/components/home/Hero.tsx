@@ -1,53 +1,105 @@
 import Link from "next/link";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { ThinArrow } from "@/components/ui/Icons";
-import type { HomeContent } from "@/lib/content-types";
+import type { HomeContent, LinkCard } from "@/lib/content-types";
+import { safeHref } from "@/lib/utils";
+import { PropertySearch } from "./PropertySearch";
 
+/**
+ * First screen of the homepage: a compact split hero, the property search panel and the
+ * three service shortcuts, sized to fit a typical laptop screen without scrolling.
+ */
 export function Hero({ content, searchUrl }: { content: HomeContent; searchUrl: string }) {
   const lines = content.heroHeadline.split("\n").filter(Boolean);
   return (
-    <section aria-labelledby="hero-heading" className="grid bg-mist lg:grid-cols-[38%_62%] xl:min-h-[clamp(600px,46vw,760px)] xl:grid-cols-[32%_68%]">
-      <div className="flex flex-col justify-center px-6 py-14 sm:px-10 sm:py-16 xl:justify-start xl:px-[clamp(2.5rem,4.5vw,4.5rem)] xl:pb-12 xl:pt-[clamp(128px,10.5vw,150px)]">
-        <h1
-          id="hero-heading"
-          className="animate-rise font-display text-[clamp(2.6rem,3.7vw,4rem)] font-medium leading-[0.95] tracking-[-0.025em] text-navy"
-        >
-          {lines.map((line, i) => (
-            <span key={i} className="block">
-              {line}
-            </span>
-          ))}
-        </h1>
-        <p className="animate-rise mt-7 max-w-[27rem] text-[clamp(1.05rem,1.3vw,1.15rem)] leading-[1.6] text-ink/85 [animation-delay:120ms]">
-          {content.heroText}
-        </p>
-        <div className="animate-rise mt-9 flex flex-wrap items-center gap-x-6 gap-y-4 [animation-delay:240ms]">
-          {searchUrl ? (
-            <a href={searchUrl} target="_blank" rel="noopener noreferrer" className="btn-navy group">
-              {content.heroButtonLabel} <ThinArrow className="btn-arrow" />
-            </a>
-          ) : (
-            <Link href="/featured-properties" className="btn-navy group">
-              {content.heroButtonLabel} <ThinArrow className="btn-arrow" />
-            </Link>
-          )}
+    <div className="bg-mist">
+      <section aria-labelledby="hero-heading" className="grid lg:grid-cols-[42%_58%] xl:min-h-[clamp(400px,31vw,470px)] xl:grid-cols-[32%_68%]">
+        <div className="flex flex-col justify-center px-6 py-10 sm:px-10 lg:py-12 xl:justify-start xl:px-[clamp(2.5rem,4.5vw,4.5rem)] xl:pb-14 xl:pt-[110px]">
+          <h1
+            id="hero-heading"
+            className="animate-rise font-display text-[clamp(2.3rem,3.1vw,3.4rem)] font-medium leading-[0.98] tracking-[-0.025em] text-navy"
+          >
+            {lines.map((line, i) => (
+              <span key={i} className="block">
+                {line}
+              </span>
+            ))}
+          </h1>
+          <p className="animate-rise mt-5 max-w-[28rem] text-[clamp(1rem,1.15vw,1.1rem)] leading-[1.55] text-ink/85 [animation-delay:120ms]">
+            {content.heroText}
+          </p>
           {content.heroSecondaryLabel && (
-            <Link href="/contact" className="group inline-flex items-center gap-3 border-b border-navy pb-1 text-[16px] text-navy">
+            <Link
+              href="/contact"
+              className="animate-rise group mt-6 inline-flex w-fit items-center gap-3 border-b border-navy pb-1 text-[16px] text-navy [animation-delay:240ms]"
+            >
               {content.heroSecondaryLabel} <ThinArrow className="btn-arrow" />
             </Link>
           )}
         </div>
+        <div className="relative aspect-[16/9] overflow-hidden lg:aspect-auto">
+          <SafeImage
+            src={content.heroImage}
+            alt={content.heroImageAlt}
+            fill
+            priority
+            sizes="(min-width: 1280px) 68vw, (min-width: 1024px) 58vw, 100vw"
+            className="animate-fade object-cover object-[50%_60%]"
+          />
+        </div>
+      </section>
+
+      <div className="container-site relative xl:-mt-10">
+        <PropertySearch searchUrl={searchUrl} heading={content.searchHeading} text={content.searchText} />
       </div>
-      <div className="relative aspect-[4/3] overflow-hidden sm:aspect-[16/10] lg:aspect-auto">
+
+      {content.services.length > 0 && (
+        <nav aria-label="Services" className="container-site pb-8 pt-4 lg:pb-10">
+          <ul className="grid gap-3 md:grid-cols-3">
+            {content.services.map((card, i) => (
+              <li key={i}>
+                <ServiceShortcut card={card} />
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
+    </div>
+  );
+}
+
+function ServiceShortcut({ card }: { card: LinkCard }) {
+  const href = safeHref(card.href) ?? "/contact";
+  const external = /^https?:\/\//.test(href);
+  const inner = (
+    <>
+      <div className="relative h-full w-[38%] shrink-0 overflow-hidden bg-mist-deep">
         <SafeImage
-          src={content.heroImage}
-          alt={content.heroImageAlt}
+          src={card.image}
+          alt=""
           fill
-          priority
-          sizes="(min-width: 1280px) 68vw, (min-width: 1024px) 62vw, 100vw"
-          className="animate-fade object-cover object-center"
+          sizes="(min-width: 768px) 12vw, 38vw"
+          className="object-cover transition-transform duration-700 group-hover:scale-[1.06]"
         />
       </div>
-    </section>
+      <div className="flex min-w-0 flex-1 flex-col justify-center px-5 py-4">
+        <span className="flex items-center gap-2.5 font-display text-[1.7rem] leading-none text-navy">
+          {card.title}
+          <ThinArrow className="transition-transform duration-300 group-hover:translate-x-1" />
+        </span>
+        {card.text && <span className="mt-2 line-clamp-2 text-[14px] leading-snug text-ink/75">{card.text}</span>}
+      </div>
+    </>
+  );
+  const cls =
+    "group flex h-[116px] overflow-hidden border border-line bg-white transition-shadow duration-300 hover:shadow-[0_16px_34px_-22px_rgba(32,42,80,0.55)]";
+  return external ? (
+    <a href={href} target="_blank" rel="noopener noreferrer" className={cls}>
+      {inner}
+    </a>
+  ) : (
+    <Link href={href} className={cls}>
+      {inner}
+    </Link>
   );
 }

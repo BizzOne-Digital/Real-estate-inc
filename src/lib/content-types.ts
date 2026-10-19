@@ -76,6 +76,8 @@ export interface HomeContent {
   heroSecondaryLabel: string;
   heroImage: string;
   heroImageAlt: string;
+  searchHeading: string;
+  searchText: string;
   benefits: Benefit[];
   servicesEyebrow: string;
   servicesHeading: string;
@@ -217,11 +219,13 @@ export interface SiteSettingsData {
 export const DEFAULT_HOME: HomeContent = {
   heroHeadline: "Find your place.\nMove with confidence.",
   heroText:
-    "Buying, selling or renting in Mississauga, Toronto and across the GTA? Work with Nadeem Khan, Broker with Discover Real Estate Inc., for honest advice and personal service from first search to closing.",
+    "Buy, sell or rent across Mississauga, Toronto and the GTA with honest advice and personal service from Nadeem Khan, Broker.",
   heroButtonLabel: "Search Properties",
   heroSecondaryLabel: "Contact Nadeem",
   heroImage: SITE_IMAGES.heroHouse,
   heroImageAlt: "Brick detached home with a double garage in a quiet residential neighbourhood",
+  searchHeading: "Search homes for sale & rent",
+  searchText: "Live MLS® listings across Mississauga, Toronto and the GTA.",
   benefits: [
     { icon: "shield", title: "Licensed Broker", subtitle: "Honest, professional representation" },
     { icon: "map", title: "Local Knowledge", subtitle: "Mississauga, Brampton, Milton & GTA" },

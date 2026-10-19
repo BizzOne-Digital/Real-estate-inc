@@ -161,7 +161,7 @@ async function main() {
   check("homepage hero headline", home.text.includes("Find your place.") && home.text.includes("Move with confidence."));
   check(
     "homepage real estate sections",
-    ["Licensed Broker", "Real estate services for every move", "Featured condo buildings", "Personal service you can trust.", "Tools to plan your purchase", "Latest from the market", "What clients say", "Good to know"].every((s) => home.text.includes(s)),
+    ["Licensed Broker", "Search homes for sale &amp; rent", "Buying", "Selling", "Relocation", "Featured condo buildings", "Personal service you can trust.", "Tools to plan your purchase", "Latest from the market", "What clients say", "Good to know"].every((s) => home.text.includes(s)),
   );
   check("homepage has no furniture content", !/furniture|sofa|collections\//i.test(home.text));
   check("homepage uses supplied logo + founder photo", home.text.includes("%2Fbrand%2Flogo.png") && home.text.includes("%2Fbrand%2Ffounder.jpg"));
@@ -523,6 +523,8 @@ async function main() {
   check("StoredUpload listing excludes binary by default", (await StoredUpload.findOne().lean())?.data === undefined);
 
   await stopServer(server);
+  // Remove cached test data so a later `next start` against the real database does not serve it.
+  rmSync(path.join(process.cwd(), ".next", "cache", "fetch-cache"), { recursive: true, force: true });
   await mongoose.disconnect();
   await mongo.stop();
 

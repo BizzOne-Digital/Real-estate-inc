@@ -100,11 +100,13 @@ const testimonial = z.object({ quote: required("Testimonial quote", 1500), name:
 
 export const homeSchema = z.object({
   heroHeadline: required("Headline", 120),
-  heroText: required("Supporting copy", 500),
+  heroText: required("Supporting copy", 220),
   heroButtonLabel: required("Button label", 40),
   heroSecondaryLabel: text(40),
   heroImage: imageUrl,
   heroImageAlt: text(200),
+  searchHeading: required("Search heading", 80),
+  searchText: text(200),
   benefits: z
     .array(z.object({ icon: z.enum(BENEFIT_ICONS), title: required("Benefit title", 60), subtitle: text(100) }))
     .max(3),

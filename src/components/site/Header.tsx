@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ChevronDown, ExternalLink, Menu, X } from "lucide-react";
+import { ChevronDown, ExternalLink, Menu, Search, X } from "lucide-react";
 import { Logo } from "./Logo";
 import { ThinArrow } from "@/components/ui/Icons";
 import { cn } from "@/lib/utils";
@@ -170,8 +170,8 @@ export function Header({ logo, logoAlt, searchUrl }: { logo: string; logoAlt: st
   }, [open, close]);
 
   const searchButton = searchUrl ? (
-    <a href={searchUrl} target="_blank" rel="noopener noreferrer" className="btn-navy group py-2.5 text-[15px] shadow-sm">
-      Search Properties <ThinArrow className="btn-arrow" />
+    <a href={searchUrl} target="_blank" rel="noopener noreferrer" className="btn-navy group py-3 text-[15.5px] font-medium shadow-md ring-1 ring-white/40">
+      <Search aria-hidden strokeWidth={2} className="h-4 w-4" /> Search Properties <ThinArrow className="btn-arrow" />
     </a>
   ) : (
     <Link href="/featured-properties" className="btn-navy group py-2.5 text-[15px] shadow-sm">

@@ -86,13 +86,18 @@ export function HomeContentForm({ initial }: { initial: HomeContent }) {
     <form onSubmit={(e) => (e.preventDefault(), save(v))} className="space-y-6">
       <FormSection title="Hero" description="The split hero at the top of the homepage.">
         <TextArea label="Headline" value={v.heroHeadline} onChange={(x) => set("heroHeadline", x)} max={120} rows={2} required help="Each line break starts a new line in the headline." />
-        <TextArea label="Supporting copy" value={v.heroText} onChange={(x) => set("heroText", x)} max={500} required />
+        <TextArea label="Supporting copy" value={v.heroText} onChange={(x) => set("heroText", x)} max={220} required help="Keep it short (two or three lines) so the search panel and service cards fit on the first screen." />
         <div className="grid gap-4 sm:grid-cols-2">
-          <TextField label="Main button label" value={v.heroButtonLabel} onChange={(x) => set("heroButtonLabel", x)} max={40} required help="Opens the property search link from Settings." />
+          <TextField label="Search button label (header)" value={v.heroButtonLabel} onChange={(x) => set("heroButtonLabel", x)} max={40} required help="Used for Search Properties links." />
           <TextField label="Second link label" value={v.heroSecondaryLabel} onChange={(x) => set("heroSecondaryLabel", x)} max={40} help="Links to the contact page. Leave empty to hide." />
         </div>
         <LocalImageField label="Hero image" folder="pages" value={v.heroImage} onChange={(x) => set("heroImage", x)} aspect="aspect-[16/10]" onBusyChange={setUploading} />
         <TextField label="Hero image description (alt text)" value={v.heroImageAlt} onChange={(x) => set("heroImageAlt", x)} max={200} />
+      </FormSection>
+
+      <FormSection title="Property search panel" description="The navy search box under the hero. Results open on the property search site set in Settings.">
+        <TextField label="Heading" value={v.searchHeading} onChange={(x) => set("searchHeading", x)} max={80} required />
+        <TextField label="Small text" value={v.searchText} onChange={(x) => set("searchText", x)} max={200} />
       </FormSection>
 
       <FormSection title="Benefits strip" description="Up to three short points shown under the hero.">
@@ -121,7 +126,7 @@ export function HomeContentForm({ initial }: { initial: HomeContent }) {
         />
       </FormSection>
 
-      <FormSection title="Services cards" description="The large photo cards below the benefits strip.">
+      <FormSection title="Service shortcuts" description="The three Buying / Selling / Relocation cards shown under the search panel.">
         <TextField label="Eyebrow" value={v.servicesEyebrow} onChange={(x) => set("servicesEyebrow", x)} max={40} />
         <TextField label="Heading" value={v.servicesHeading} onChange={(x) => set("servicesHeading", x)} max={120} required />
         <TextArea label="Text" value={v.servicesText} onChange={(x) => set("servicesText", x)} max={400} rows={2} />

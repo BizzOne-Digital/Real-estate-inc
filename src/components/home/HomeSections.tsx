@@ -8,39 +8,6 @@ import { SectionIntro } from "./SectionIntro";
 
 const outlineLink = "group inline-flex w-fit items-center gap-3 border-b border-navy pb-1 text-[16px] text-navy";
 
-/** Three large photo cards, laid out like the reference "Find your kind of comfort" row. */
-export function ServicesSection({ content }: { content: HomeContent }) {
-  if (content.services.length === 0) return null;
-  return (
-    <section aria-labelledby="services-heading" className="bg-offwhite pb-3 pt-14 sm:pt-16 lg:pt-[72px]">
-      <div className="container-site mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between lg:mb-6">
-        <div>
-          {content.servicesEyebrow && (
-            <p className="eyebrow flex items-center gap-4">
-              {content.servicesEyebrow}
-              <span aria-hidden className="h-px w-12 bg-navy/70" />
-            </p>
-          )}
-          <h2
-            id="services-heading"
-            className="mt-4 font-display text-[clamp(2.4rem,4.2vw,3.4rem)] font-medium leading-none tracking-[-0.015em] text-navy"
-          >
-            {content.servicesHeading}
-          </h2>
-        </div>
-        {content.servicesText && <p className="max-w-[22rem] text-[15px] leading-relaxed text-ink/80 md:mb-1">{content.servicesText}</p>}
-      </div>
-      <ul className="mx-auto grid max-w-[1600px] gap-2.5 px-3 sm:grid-cols-2 lg:grid-cols-3 lg:px-5">
-        {content.services.map((card, i) => (
-          <li key={i} className={i === 2 && content.services.length === 3 ? "sm:col-span-2 lg:col-span-1" : undefined}>
-            <ImageLinkCard card={card} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" />
-          </li>
-        ))}
-      </ul>
-    </section>
-  );
-}
-
 export function FeaturedCondos({ content, condos }: { content: HomeContent; condos: CondoT[] }) {
   if (!content.showCondos || condos.length === 0) return null;
   return (
