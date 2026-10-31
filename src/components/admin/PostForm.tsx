@@ -35,8 +35,10 @@ export function PostForm({ id, initial }: { id: string | null; initial: PostForm
   function submit(e: React.FormEvent) {
     e.preventDefault();
     start(async () => {
-      // Publish at noon Toronto time on the chosen date so the date never shifts across time zones.
-      const res = await savePost(id, { ...v, publishedAt: `${v.publishedAt}T12:00:00-05:00` });
+      // Today's date publishes immediately; other dates use noon Toronto time so the day never shifts across time zones.
+      const today = new Date().toLocaleDateString("en-CA", { timeZone: "America/Toronto" });
+      const publishedAt = v.publishedAt === today ? new Date().toISOString() : `${v.publishedAt}T12:00:00-05:00`;
+      const res = await savePost(id, { ...v, publishedAt });
       if (!res.ok) return toast("error", res.error);
       toast("success", res.message ?? "Saved.");
       if (!id && res.data) router.replace(`/admin/insights/${res.data.id}`);

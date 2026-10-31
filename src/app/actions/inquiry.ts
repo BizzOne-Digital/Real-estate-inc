@@ -1,9 +1,13 @@
 "use server";
 
+import { after } from "next/server";
 import { revalidatePath } from "next/cache";
 import { connectDB } from "@/lib/db";
 import { Condo, Inquiry } from "@/lib/models";
 import { inquirySchema } from "@/lib/validation";
+import { getSettings } from "@/lib/data";
+import { sendInquiryEmails } from "@/lib/mailer";
+import { siteUrl } from "@/lib/utils";
 
 export interface InquiryState {
   status: "idle" | "success" | "error";
@@ -65,6 +69,23 @@ export async function submitInquiry(_prev: InquiryState, formData: FormData): Pr
       message: d.message,
     });
     revalidatePath("/admin", "layout");
+    // Email after responding so a slow or failing mail server never delays or breaks the form.
+    after(async () => {
+      const settings = await getSettings().catch(() => null);
+      await sendInquiryEmails(
+        {
+          name: d.name,
+          email: d.email,
+          phone: d.phone,
+          interest: d.interest,
+          reference: d.reference,
+          condoName,
+          message: d.message,
+          adminUrl: `${siteUrl()}/admin/inquiries`,
+        },
+        { agentName: settings?.agentName ?? "", notifyTo: settings?.contactEmail ?? "" },
+      );
+    });
     return { status: "success", message: "" };
   } catch (err) {
     console.error("[inquiry] failed", err);
